@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BI-SSS | KUPVA BB Compliance Calendar & Surveillance Tracker — Sulawesi Utara</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ================================================================
+           CSS VARIABLES & RESET
+        ================================================================ */
+        :root {
+            --primary-navy:       #0A1D37;
+            --secondary-navy:     #112B50;
+            --tertiary-navy:      #0d2344;
+            --accent-teal:        #00A8B5;
+            --accent-cyan:        #00E5FF;
+            --accent-cyan-dim:    rgba(0, 229, 255, 0.18);
+            --accent-cyan-glow:   0 0 24px rgba(0, 229, 255, 0.35), 0 0 48px rgba(0, 229, 255, 0.15);
+            --bg-root:            #0b1c32;
+            --bg-workspace:       #0f233d;
+            --bg-card:            #162f4e;
+            --bg-card-hover:      #1c3860;
+            --text-main:          #f1f5f9;
+            --text-muted:         #7a9abb;
+            --text-dim:           #4f6e8e;
+            --border-color:       #1e3a5c;
+            --border-bright:      rgba(0, 229, 255, 0.4);
+
+            --red:        #ef4444;  --red-bg:    rgba(239, 68,  68,  0.10); --red-b:  rgba(239,68,68,.25);
+            --yellow:     #f59e0b;  --yellow-bg: rgba(245,158,  11,  0.10); --yellow-b: rgba(245,158,11,.25);
+            --green:      #10b981;  --green-bg:  rgba( 16,185, 129,  0.10); --green-b: rgba(16,185,129,.25);
+            --blue:       #3b82f6;  --blue-bg:   rgba( 59,130, 246,  0.10); --blue-b: rgba(59,130,246,.25);
+            --purple:     #a855f7;  --purple-bg: rgba(168, 85, 247,  0.10);
+            --orange:     #f97316;  --orange-bg: rgba(249,115,  22,  0.10); --orange-b: rgba(249,115,22,.25);
+            --wa-green:   #25D366;
+
+            --font-mono: 'JetBrains Mono', monospace;
+            --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+            --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-root);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 13px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ================================================================
+           SIDEBAR
+        ================================================================ */
+        #sidebar {
+            width: 268px; flex-shrink: 0;
+            background: linear-gradient(180deg, var(--primary-navy) 0%, #081628 100%);
+            border-right: 1px solid var(--border-color);
+            display: flex; flex-direction: column; z-index: 20;
+        }
+        .sidebar-brand {
+            padding: 20px 22px; display: flex; align-items: center; gap: 13px;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0, 229, 255, 0.03);
+        }
+        .brand-logo-wrap {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent-teal), #0081a7);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 168, 181, 0.35);
+        }
+        .brand-text h1 { font-size: 15px; font-weight: 800; letter-spacing: 0.6px; color: #fff; }
+        .brand-text p  { font-size: 9.5px; color: var(--accent-cyan); font-weight: 600; letter-spacing: 0.4px; margin-top: 1px; }
+        .sidebar-region {
+            margin: 14px 14px 0 14px; padding: 8px 10px; border-radius: var(--radius-sm);
+            background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.15);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .sidebar-region span { font-size: 11px; color: var(--accent-cyan); font-weight: 600; }
+        .sidebar-region i { color: var(--accent-cyan); font-size: 12px; }
+        .sidebar-menu { list-style: none; padding: 14px 10px; flex: 1; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+        .menu-label {
+            font-size: 9.5px; font-weight: 700; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 1.1px;
+            padding: 10px 10px 5px 10px; display: block;
+        }
+        .menu-item a {
+            display: flex; align-items: center; gap: 11px; padding: 10px 12px;
+            color: var(--text-muted); text-decoration: none; border-radius: var(--radius-sm);
+            font-weight: 500; font-size: 13px; transition: var(--transition); cursor: pointer;
+        }
+        .menu-item a i { width: 16px; text-align: center; flex-shrink: 0; }
+        .menu-item a:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .menu-item.active a {
+            background: linear-gradient(135deg, var(--accent-teal) 0%, #007b8a 100%);
+            color: #fff; font-weight: 700;
+            box-shadow: 0 4px 14px rgba(0, 168, 181, 0.35);
+        }
+        .menu-badge {
+            margin-left: auto; background: var(--red); color: #fff;
+            font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 10px;
+        }
+        .sidebar-footer {
+            padding: 14px; border-top: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .user-avatar {
+            width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--accent-teal), #004d5f);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: #fff; font-size: 13px;
+        }
+        .user-info p { font-size: 12px; font-weight: 700; color: #fff; }
+        .user-info span { font-size: 10px; color: var(--text-muted); }
+        .user-status {
+            margin-left: auto; width: 8px; height: 8px; border-radius: 50%;
+            background: var(--green); box-shadow: 0 0 6px var(--green); flex-shrink: 0;
+        }
+
+        /* ================================================================
+           APP CONTAINER & TOP NAVBAR
+        ================================================================ */
+        #app-container { display: flex; flex-direction: column; flex: 1; min-width: 0; height: 100%; overflow: hidden; }
+        #top-navbar {
+            height: 60px; background: var(--primary-navy);
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 22px; flex-shrink: 0; gap: 16px;
+        }
+        .navbar-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+        .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+        .breadcrumb .crumb-active { color: var(--accent-cyan); font-weight: 700; }
+        .search-wrap { position: relative; width: 380px; flex-shrink: 0; }
+        .search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-size: 13px; }
+        .search-input {
+            width: 100%; padding: 9px 12px 9px 36px; background: var(--bg-card);
+            border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+            color: var(--text-main); font-size: 12px; font-family: inherit; outline: none;
+            transition: var(--transition);
+        }
+        .search-input::placeholder { color: var(--text-dim); }
+        .search-input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 0 3px var(--accent-cyan-dim); }
+        .navbar-right { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+        .live-clock { font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan); font-weight: 600; }
+        .nav-pill {
+            display: flex; align-items: center; gap: 6px; padding: 6px 11px;
+            background: var(--red-bg); border: 1px solid var(--red-b); border-radius: 20px;
+            color: #f87171; font-size: 11px; font-weight: 700; cursor: pointer;
+        }
+        .nav-icon-btn {
+            background: none; border: none; color: var(--text-muted);
+            font-size: 16px; cursor: pointer; position: relative; padding: 4px;
+            transition: color 0.2s;
+        }
+        .nav-icon-btn:hover { color: var(--accent-cyan); }
+        .nav-icon-btn .dot {
+            position: absolute; top: 0; right: 0; width: 7px; height: 7px;
+            background: var(--red); border-radius: 50%; border: 2px solid var(--primary-navy);
+        }
+
+        /* ================================================================
+           MAIN WORKSPACE LAYOUT
+        ================================================================ */
+        #main-workspace { display: flex; flex: 1; overflow: hidden; position: relative; }
+        #content-stream {
+            flex: 1; padding: 20px; overflow-y: auto; height: 100%;
+            scrollbar-width: thin; scrollbar-color: var(--border-color) transparent;
+        }
+        #content-stream::-webkit-scrollbar { width: 5px; }
+        #content-stream::-webkit-scrollbar-track { background: transparent; }
+        #content-stream::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        #context-panel {
+            width: 390px; flex-shrink: 0;
+            background: linear-gradient(180deg, var(--primary-navy) 0%, #091a2e 100%);
+            border-left: 1px solid var(--border-color);
+            display: flex; flex-direction: column; height: 100%; overflow-y: auto;
+            scrollbar-width: thin; scrollbar-color: var(--border-color) transparent;
+        }
+        #context-panel::-webkit-scrollbar { width: 4px; }
+        #context-panel::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+        /* ================================================================
+           KPI METRIC CARDS
+        ================================================================ */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+        .metric-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 18px; cursor: pointer;
+            display: flex; align-items: flex-start; justify-content: space-between;
+            transition: var(--transition); position: relative; overflow: hidden;
+        }
+        .metric-card::before {
+            content: ''; position: absolute; inset: 0; opacity: 0;
+            background: linear-gradient(135deg, transparent, rgba(0, 229, 255, 0.06));
+            transition: opacity 0.3s;
+        }
+        .metric-card:hover::before, .metric-card.kpi-active::before { opacity: 1; }
+        .metric-card:hover, .metric-card.kpi-active {
+            border-color: var(--accent-cyan); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,229,255,0.15);
+        }
+        .metric-card.kpi-active { border-color: var(--accent-cyan); }
+        .metric-card-left { position: relative; z-index: 1; }
+        .metric-label {
+            font-size: 10px; font-weight: 700; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px;
+        }
+        .metric-value { font-size: 28px; font-weight: 800; color: #fff; line-height: 1; }
+        .metric-sub { font-size: 10px; color: var(--text-dim); margin-top: 5px; }
+        .metric-icon {
+            width: 42px; height: 42px; border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 19px; flex-shrink: 0; position: relative; z-index: 1;
+        }
+        .icon-pending  { background: var(--blue-bg);   color: #60a5fa; }
+        .icon-upcoming { background: var(--yellow-bg);  color: #fbbf24; }
+        .icon-warnings { background: var(--red-bg);     color: #f87171; }
+        .icon-total    { background: rgba(0,229,255,.08); color: var(--accent-cyan); }
+        .icon-green    { background: var(--green-bg);   color: #34d399; }
+        .icon-orange   { background: var(--orange-bg);  color: #fb923c; }
+
+        /* ================================================================
+           WORKSPACE HEADER
+        ================================================================ */
+        .workspace-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 16px; gap: 12px;
+        }
+        .workspace-header-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .view-title { font-size: 15px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 14px; background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm); color: #fff; font-weight: 700; font-size: 12px;
+            cursor: pointer; transition: var(--transition); white-space: nowrap;
+        }
+        .back-btn:hover { border-color: var(--accent-cyan); background: var(--bg-card-hover); }
+        .workspace-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .month-nav {
+            display: flex; align-items: center; gap: 10px;
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm); padding: 6px 12px;
+        }
+        .month-nav span { font-weight: 700; font-size: 13px; color: #fff; }
+        .month-nav-btn {
+            background: none; border: none; color: var(--text-muted);
+            cursor: pointer; padding: 2px 6px; transition: color 0.2s; font-size: 13px;
+        }
+        .month-nav-btn:hover { color: var(--accent-cyan); }
+        .toolbar-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 13px; background: var(--bg-card);
+            border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+            color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: var(--transition);
+        }
+        .toolbar-btn:hover { color: #fff; border-color: var(--accent-teal); }
+
+        /* ================================================================
+           CALENDAR GRID — JUNE 2026
+        ================================================================ */
+        .calendar-shell {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 20px;
+        }
+        .calendar-header {
+            padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0, 229, 255, 0.03);
+        }
+        .calendar-header-title { font-size: 13px; font-weight: 800; color: #fff; }
+        .calendar-header-meta { font-size: 11px; color: var(--text-muted); }
+        .cal-legend { display: flex; align-items: center; gap: 16px; }
+        .cal-legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text-muted); font-weight: 600; }
+        .cal-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+        .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); }
+        .cal-weekday {
+            padding: 10px 8px; text-align: center; font-size: 11px; font-weight: 700;
+            color: var(--text-dim); border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color); letter-spacing: 0.5px;
+            background: rgba(10, 29, 55, 0.6);
+        }
+        .cal-weekday:last-child { border-right: none; }
+        .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); }
+        .cal-day {
+            min-height: 112px; padding: 8px 7px;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            background: rgba(22, 47, 78, 0.18);
+            display: flex; flex-direction: column; gap: 5px;
+            transition: background 0.2s; position: relative; overflow: hidden;
+        }
+        .cal-day:nth-child(7n) { border-right: none; }
+        .cal-day:hover:not(.cal-empty) { background: rgba(22, 47, 78, 0.5); }
+        .cal-day.cal-empty { background: rgba(8, 18, 30, 0.4); min-height: 112px; }
+        .cal-day.cal-weekend .day-num { color: var(--text-dim); }
+
+        /* TODAY — June 22, 2026 — TEAL GLOW + GLASSMORPHIC */
+        .cal-day.cal-today {
+            border: 2px solid var(--accent-cyan) !important;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.06) 0%, rgba(0, 168, 181, 0.08) 100%) !important;
+            box-shadow: var(--accent-cyan-glow), inset 0 0 30px rgba(0, 229, 255, 0.04);
+            z-index: 3;
+        }
+        .today-monitoring-banner {
+            position: absolute; top: 0; left: 0; right: 0;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-cyan));
+            color: var(--primary-navy); font-size: 7.5px; font-weight: 900;
+            text-align: center; padding: 3px 4px; letter-spacing: 0.6px;
+            text-transform: uppercase; white-space: nowrap; overflow: hidden;
+        }
+        .day-num {
+            font-size: 12px; font-weight: 800; color: #fff;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-top: 14px; /* leave space for banner */
+        }
+        .cal-day:not(.cal-today) .day-num { margin-top: 0; }
+        .today-chip {
+            background: var(--accent-cyan); color: var(--primary-navy);
+            font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 4px;
+        }
+
+        /* ================================================================
+           EVENT BADGES (CALENDAR CELLS)
+        ================================================================ */
+        .ev-badge {
+            padding: 5px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 600;
+            cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            border-left: 3px solid transparent; transition: transform 0.15s, filter 0.15s;
+            display: flex; align-items: center; gap: 5px; max-width: 100%;
+        }
+        .ev-badge:hover { transform: translateX(2px); filter: brightness(1.12); }
+        .ev-badge i { flex-shrink: 0; font-size: 9px; }
+        .badge-incoming { background: var(--blue-bg);   color: #60a5fa; border-left-color: var(--blue);   }
+        .badge-outgoing { background: var(--purple-bg); color: #c084fc; border-left-color: var(--purple); }
+        .badge-critical {
+            background: var(--red-bg); color: #f87171; border-left-color: var(--red);
+            animation: pulseRed 2s ease-in-out infinite;
+        }
+        .badge-success  { background: var(--green-bg);  color: #34d399; border-left-color: var(--green);  }
+        .badge-warning  { background: var(--yellow-bg); color: #fbbf24; border-left-color: var(--yellow); }
+        .badge-info     { background: rgba(0,229,255,.09); color: var(--accent-cyan); border-left-color: var(--accent-cyan); }
+        @keyframes pulseRed {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+            50% { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25); }
+        }
+
+        /* ================================================================
+           LIST/TABLE VIEWS (FILTER STATES)
+        ================================================================ */
+        .list-shell {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 20px;
+        }
+        .list-shell-header {
+            padding: 14px 18px; border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(0, 229, 255, 0.03);
+        }
+        .list-shell-title { font-size: 13px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .list-shell-count {
+            background: var(--accent-cyan-dim); color: var(--accent-cyan);
+            font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+        }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table thead tr { background: rgba(10, 29, 55, 0.7); }
+        .data-table th {
+            padding: 12px 14px; font-size: 10.5px; font-weight: 700; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 0.7px;
+            border-bottom: 1px solid var(--border-color); text-align: left; white-space: nowrap;
+        }
+        .data-table td {
+            padding: 13px 14px; border-bottom: 1px solid rgba(30, 58, 92, 0.5);
+            color: var(--text-main); vertical-align: middle;
+        }
+        .data-table tbody tr { transition: background 0.15s; }
+        .data-table tbody tr:hover td { background: rgba(255,255,255,0.025); cursor: pointer; }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+        .entity-name { font-weight: 700; color: #fff; display: block; font-size: 13px; }
+        .entity-id { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); }
+        .entity-location { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .mono-text { font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan); }
+
+        /* Status Pills */
+        .pill {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap;
+        }
+        .pill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .pill-danger  { background: var(--red-bg);    color: #f87171; border: 1px solid var(--red-b); }
+        .pill-warning { background: var(--yellow-bg); color: #fbbf24; border: 1px solid var(--yellow-b); }
+        .pill-success { background: var(--green-bg);  color: #34d399; border: 1px solid var(--green-b); }
+        .pill-info    { background: var(--blue-bg);   color: #60a5fa; border: 1px solid var(--blue-b); }
+        .pill-cyan    { background: var(--accent-cyan-dim); color: var(--accent-cyan); border: 1px solid rgba(0,229,255,.3); }
+        .pill-orange  { background: var(--orange-bg); color: #fb923c; border: 1px solid var(--orange-b); }
+        .pill-neutral { background: rgba(255,255,255,.06); color: var(--text-muted); border: 1px solid var(--border-color); }
+
+        /* SLA Deadline Bars */
+        .sla-bar-wrap { display: flex; align-items: center; gap: 8px; }
+        .sla-bar { height: 4px; border-radius: 2px; background: var(--border-color); flex: 1; overflow: hidden; }
+        .sla-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
+        .sla-pct { font-size: 10px; font-weight: 700; font-family: var(--font-mono); white-space: nowrap; }
+
+        /* ================================================================
+           RIGHT CONTEXT PANEL
+        ================================================================ */
+        .panel-eyebrow {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0, 229, 255, 0.03);
+        }
+        .panel-tag {
+            font-size: 9.5px; font-weight: 800; color: var(--accent-cyan);
+            text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;
+        }
+        .panel-entity-name { font-size: 15px; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 4px; }
+        .panel-entity-sub { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+        .panel-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 18px; }
+
+        /* Countdown Box */
+        .countdown-box {
+            border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; gap: 12px;
+            border: 1px solid;
+        }
+        .countdown-box.type-critical  { background: var(--red-bg);    border-color: var(--red-b);    color: #f87171; }
+        .countdown-box.type-warning   { background: var(--yellow-bg);  border-color: var(--yellow-b); color: #fbbf24; }
+        .countdown-box.type-pending   { background: var(--blue-bg);    border-color: var(--blue-b);   color: #60a5fa; }
+        .countdown-box.type-success   { background: var(--green-bg);   border-color: var(--green-b);  color: #34d399; }
+        .countdown-box.type-info      { background: var(--accent-cyan-dim); border-color: rgba(0,229,255,.3); color: var(--accent-cyan); }
+        .countdown-icon { font-size: 22px; flex-shrink: 0; }
+        .countdown-time { font-size: 15px; font-weight: 800; }
+        .countdown-sub  { font-size: 10.5px; opacity: 0.8; margin-top: 2px; }
+
+        /* Detail Groups */
+        .detail-group-label {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            color: var(--text-dim); letter-spacing: 0.8px; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .detail-group-label::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+        .legal-card {
+            background: rgba(8, 18, 30, 0.5); border-radius: var(--radius-md);
+            border-left: 4px solid var(--accent-teal); padding: 13px 14px;
+            border: 1px solid var(--border-color); border-left: 4px solid var(--accent-teal);
+        }
+        .legal-card-title { font-weight: 700; color: #fff; font-size: 12.5px; margin-bottom: 5px; }
+        .legal-card-desc  { color: var(--text-muted); line-height: 1.6; font-size: 11.5px; }
+        .legal-card-ref {
+            margin-top: 8px; display: flex; align-items: center; gap: 6px;
+            font-size: 10px; font-family: var(--font-mono); color: var(--accent-cyan);
+            font-weight: 600;
+        }
+        .aml-transaction-box {
+            background: rgba(239, 68, 68, 0.06); border: 1px solid var(--red-b);
+            border-radius: var(--radius-md); padding: 13px 14px;
+        }
+        .aml-tx-title { font-weight: 800; color: #f87171; font-size: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .aml-tx-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .aml-tx-key { font-size: 11px; color: var(--text-muted); }
+        .aml-tx-val { font-size: 11.5px; font-weight: 700; color: #fff; font-family: var(--font-mono); }
+        .aml-tx-val.critical { color: #f87171; }
+
+        /* Checklist */
+        .checklist { display: flex; flex-direction: column; gap: 7px; }
+        .checklist-item {
+            display: flex; align-items: flex-start; gap: 9px;
+            padding: 9px 11px; border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color); background: rgba(22, 47, 78, 0.3);
+            font-size: 11.5px; color: var(--text-muted); transition: var(--transition);
+        }
+        .checklist-item.done { color: var(--text-main); background: rgba(16, 185, 129, 0.06); border-color: var(--green-b); }
+        .checklist-icon { flex-shrink: 0; margin-top: 1px; font-size: 13px; }
+        .checklist-item.done .checklist-icon { color: var(--green); }
+        .checklist-item:not(.done) .checklist-icon { color: var(--text-dim); }
+
+        /* Branch Details */
+        .branch-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .branch-info-cell {
+            background: rgba(8, 18, 30, 0.4); border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm); padding: 10px 12px;
+        }
+        .branch-info-key { font-size: 9.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .branch-info-val { font-size: 11.5px; font-weight: 700; color: #fff; }
+
+        /* Action Buttons */
+        .panel-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 11px 16px; border-radius: var(--radius-sm); font-weight: 700; font-size: 12px;
+            cursor: pointer; transition: var(--transition); border: none; width: 100%;
+        }
+        .panel-btn-danger { background: linear-gradient(135deg, #dc2626, #b91c1c); color: #fff; }
+        .panel-btn-danger:hover { box-shadow: 0 6px 18px rgba(220, 38, 38, 0.4); transform: translateY(-1px); }
+        .panel-btn-teal  { background: linear-gradient(135deg, var(--accent-teal), #007b8a); color: #fff; }
+        .panel-btn-teal:hover { box-shadow: 0 6px 18px rgba(0, 168, 181, 0.4); transform: translateY(-1px); }
+        .panel-btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); }
+        .panel-btn-ghost:hover { color: #fff; border-color: var(--accent-teal); background: rgba(0,168,181,0.08); }
+
+        /* ================================================================
+           AUTOMATION / WHATSAPP LOG
+        ================================================================ */
+        .automation-shell {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); overflow: hidden; margin-top: 20px;
+        }
+        .automation-header {
+            padding: 14px 18px; border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(37, 211, 102, 0.04);
+        }
+        .automation-title { font-size: 13px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 9px; }
+        .wa-pulse {
+            width: 8px; height: 8px; border-radius: 50%; background: var(--wa-green);
+            box-shadow: 0 0 6px var(--wa-green); animation: waPulse 2s ease-in-out infinite;
+        }
+        @keyframes waPulse {
+            0%, 100% { box-shadow: 0 0 6px var(--wa-green); }
+            50% { box-shadow: 0 0 14px var(--wa-green), 0 0 28px rgba(37,211,102,0.3); }
+        }
+        .omni-badge {
+            display: flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700;
+        }
+        .omni-badge .wa-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--wa-green); }
+        .omni-badge .portal-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+        .btn-wa-resend {
+            background: transparent; border: 1px solid var(--wa-green); color: #34d399;
+            padding: 6px 11px; border-radius: var(--radius-sm); font-weight: 700; font-size: 11px;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: var(--transition);
+            white-space: nowrap;
+        }
+        .btn-wa-resend:hover { background: var(--wa-green); color: #0b1c32; }
+
+        /* ================================================================
+           EXECUTIVE DASHBOARD
+        ================================================================ */
+        .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 20px; }
+        .chart-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 18px;
+        }
+        .chart-title { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .bar-graph { display: flex; align-items: flex-end; justify-content: space-around; height: 160px; padding-top: 20px; border-bottom: 1px solid var(--border-color); gap: 6px; }
+        .bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .bar-fill {
+            width: 100%; max-width: 48px; border-radius: 4px 4px 0 0; position: relative; transition: all 0.4s;
+            cursor: pointer;
+        }
+        .bar-fill:hover { filter: brightness(1.15); }
+        .bar-val { position: absolute; top: -20px; left: 0; right: 0; text-align: center; font-size: 11px; font-weight: 700; color: #fff; }
+        .bar-lbl { margin-top: 8px; font-size: 10px; color: var(--text-dim); text-align: center; font-weight: 600; }
+        .risk-zone-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 8px; }
+        .rz-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .rz-label { font-size: 12px; font-weight: 600; color: #fff; flex: 1; }
+        .rz-count { font-size: 11px; font-weight: 700; }
+
+        /* ================================================================
+           TOAST NOTIFICATION SYSTEM
+        ================================================================ */
+        #toast-container { position: fixed; top: 70px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast-card {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 14px 16px; border-radius: var(--radius-md); max-width: 420px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.35); border: 1px solid;
+            animation: toastIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 12.5px; line-height: 1.5;
+        }
+        .toast-card.toast-success { background: rgba(16, 185, 129, 0.12); border-color: var(--green-b); color: #34d399; }
+        .toast-card.toast-wa     { background: rgba(37, 211, 102, 0.12); border-color: rgba(37,211,102,.3); color: #4ade80; }
+        .toast-card.toast-danger { background: var(--red-bg); border-color: var(--red-b); color: #f87171; }
+        .toast-card.toast-info   { background: var(--blue-bg); border-color: var(--blue-b); color: #60a5fa; }
+        .toast-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .toast-body strong { display: block; font-weight: 800; margin-bottom: 2px; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(20px); } }
+
+        /* ================================================================
+           UTILITY
+        ================================================================ */
+        .divider { height: 1px; background: var(--border-color); margin: 4px 0; }
+        .text-red { color: #f87171; } .text-yellow { color: #fbbf24; } .text-green { color: #34d399; }
+        .text-cyan { color: var(--accent-cyan); } .text-muted { color: var(--text-muted); }
+        .fw-700 { font-weight: 700; } .fw-800 { font-weight: 800; }
+        .font-mono { font-family: var(--font-mono); }
+        .d-none { display: none !important; }
+        .text-critical { color: #f87171; animation: textPulse 1.5s ease-in-out infinite; }
+        @keyframes textPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.65; } }
+    </style>
+</head>
+<body>
+
+<!-- ================================================================
+     TOAST CONTAINER
+================================================================ -->
+<div id="toast-container"></div>
+
+<!-- ================================================================
+     SIDEBAR — NAVIGASI UTAMA
+================================================================ -->
+<nav id="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-logo-wrap"><i class="fa-solid fa-building-columns" style="font-size:18px;color:#fff;"></i></div>
+        <div class="brand-text">
+            <h1>BI-SSS</h1>
+            <p>Surveillance & Supervision System</p>
+        </div>
+    </div>
+    <div class="sidebar-region">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>KPwBI Sulawesi Utara — Manado</span>
+    </div>
+    <ul class="sidebar-menu">
+        <span class="menu-label">Navigasi Utama</span>
+        <li class="menu-item" id="menu-exec" onclick="switchModule('exec')">
+            <a><i class="fa-solid fa-chart-pie"></i> Dashboard Eksekutif</a>
+        </li>
+        <li class="menu-item" id="menu-master" onclick="switchModule('master')">
+            <a><i class="fa-solid fa-building"></i> Data Master Entitas</a>
+        </li>
+        <span class="menu-label">Modul Pengawasan</span>
+        <li class="menu-item active" id="menu-tracker" onclick="switchModule('tracker')">
+            <a><i class="fa-solid fa-calendar-check"></i> KUPVA BB Tracker <span class="menu-badge">4</span></a>
+        </li>
+        <li class="menu-item" id="menu-sanctions" onclick="switchModule('sanctions')">
+            <a><i class="fa-solid fa-scale-balanced"></i> Sanksi & Penegakan Hukum</a>
+        </li>
+        <li class="menu-item" id="menu-aml" onclick="switchModule('aml')">
+            <a><i class="fa-solid fa-file-shield"></i> Matriks APU/PPT & PPATK</a>
+        </li>
+    </ul>
+    <div class="sidebar-footer">
+        <div class="user-avatar">BS</div>
+        <div class="user-info">
+            <p>Budi Santoso, SE</p>
+            <span>Pengawas Senior BI — DKSP</span>
+        </div>
+        <div class="user-status"></div>
+    </div>
+</nav>
+
+<!-- ================================================================
+     APP CONTAINER
+================================================================ -->
+<div id="app-container">
+
+    <!-- TOP NAVBAR -->
+    <header id="top-navbar">
+        <div class="navbar-left">
+            <div class="breadcrumb">
+                <i class="fa-solid fa-building-columns" style="color:var(--accent-cyan);"></i>
+                <span>BI-SSS</span>
+                <i class="fa-solid fa-chevron-right" style="font-size:9px;"></i>
+                <span id="breadcrumb-active" class="crumb-active">KUPVA BB Tracker</span>
+            </div>
+            <div class="search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="search-input" id="global-search"
+                    oninput="handleGlobalSearch(this.value)"
+                    placeholder="Cari entitas KUPVA BB… (Dua Sisi, Sentralindo, Haji La Tunrung, Wale Bunaken)">
+            </div>
+        </div>
+        <div class="navbar-right">
+            <div class="live-clock" id="live-clock">Senin, 22 Juni 2026</div>
+            <div class="nav-pill"><i class="fa-solid fa-circle-exclamation"></i> 3 Peringatan Kritis</div>
+            <button class="nav-icon-btn" onclick="showToast('Tidak ada notifikasi baru.', 'info', 'Kotak Notifikasi', null)">
+                <i class="fa-solid fa-bell"></i><span class="dot"></span>
+            </button>
+            <button class="nav-icon-btn" onclick="showToast('Sinkronisasi data dengan server BI berhasil.', 'success', 'Sinkronisasi', null)">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN WORKSPACE -->
+    <div id="main-workspace">
+
+        <!-- CONTENT STREAM -->
+        <div id="content-stream">
+
+            <!-- KPI CARDS -->
+            <div class="metrics-grid" id="kpi-matrix-section"></div>
+
+            <!-- WORKSPACE HEADER -->
+            <div class="workspace-header">
+                <div class="workspace-header-left">
+                    <button class="back-btn d-none" id="btn-back-calendar" onclick="resetToTrackerDefault()">
+                        <i class="fa-solid fa-arrow-left"></i> Kembali ke Kalender
+                    </button>
+                    <h2 class="view-title" id="workspace-title">Kalender Kepatuhan KUPVA BB — Juni 2026</h2>
+                </div>
+                <div class="workspace-header-right" id="workspace-toolbar">
+                    <div class="month-nav">
+                        <button class="month-nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                        <span>Juni 2026</span>
+                        <button class="month-nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                    <button class="toolbar-btn"><i class="fa-solid fa-filter"></i> Filter</button>
+                    <button class="toolbar-btn"><i class="fa-solid fa-download"></i> Ekspor</button>
+                </div>
+            </div>
+
+            <!-- DYNAMIC WORKSPACE -->
+            <div id="dynamic-module-workspace"></div>
+
+            <!-- WHATSAPP AUTOMATION LOG -->
+            <div class="automation-shell" id="global-automation-log">
+                <div class="automation-header">
+                    <div class="automation-title">
+                        <div class="wa-pulse"></div>
+                        <i class="fa-brands fa-whatsapp" style="color:var(--wa-green);font-size:16px;"></i>
+                        Log Interkoneksi Otomatisasi WhatsApp Gateway & Surveillance Real-Time
+                    </div>
+                    <span style="font-size:10.5px;color:var(--text-muted);font-weight:600;">Auto-refresh tiap 5 menit · 22 Juni 2026, 09:47 WIB</span>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Waktu Pemicu</th>
+                            <th>Nama Entitas KUPVA BB</th>
+                            <th>Deteksi Aturan SLA / Jenis Notifikasi</th>
+                            <th>Status Pengiriman Omni-Channel</th>
+                            <th>Aksi Eskalasi Cepat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="automation-log-rows"></tbody>
+                </table>
+            </div>
+
+        </div><!-- /content-stream -->
+
+        <!-- RIGHT CONTEXT PANEL -->
+        <aside id="context-panel">
+            <div class="panel-eyebrow" id="panel-eyebrow">
+                <span class="panel-tag" id="panel-tag">Konteks Regulasi</span>
+                <p class="panel-entity-name" id="panel-title">Pilih entitas atau event untuk memuat detail regulasi</p>
+                <p class="panel-entity-sub" id="panel-sub"><i class="fa-solid fa-map-marker-alt"></i> &nbsp;Sulawesi Utara — KPwBI Manado</p>
+            </div>
+            <div class="panel-body" id="panel-body">
+                <div style="text-align:center;padding:30px 20px;color:var(--text-dim);">
+                    <i class="fa-solid fa-calendar-check" style="font-size:36px;margin-bottom:14px;opacity:0.3;display:block;"></i>
+                    <p style="font-size:12px;line-height:1.6;">Klik pada event kalender atau baris tabel untuk menampilkan detail regulasi, dasar hukum, dan opsi tindak lanjut.</p>
+                </div>
+            </div>
+        </aside>
+
+    </div><!-- /main-workspace -->
+
+</div><!-- /app-container -->
+
+<!-- ================================================================
+     SCRIPTING ENGINE — FULL INTEGRATION
+================================================================ -->
+<script>
+"use strict";
+
+/* ================================================================
+   LIVE SYSTEM DATE — Senin, 22 Juni 2026
+================================================================ */
+const TODAY_DAY   = 22;
+const TODAY_MONTH = 'Juni';
+const TODAY_YEAR  = 2026;
+const TODAY_DOW   = 'Senin';
+let currentModule = 'tracker';
+let currentKpiFilter = null;
+
+/* ================================================================
+   REGIONAL DATABASE — SULAWESI UTARA (SULUT)
+================================================================ */
+const DB = {
+
+    /* 4 SULUT SCENARIOS */
+    scenarios: [
+        {
+            id: 'sulut-001',
+            day: 24,          /* 2 hari dari hari ini (22 Juni) = 24 Juni */
+            type: 'upcoming',
+            kpiFilter: 'upcoming',
+            badgeClass: 'badge-warning',
+            badgeIcon: 'fa-hourglass-half',
+            entity: 'PT Dua Sisi Sentosa',
+            entityId: 'KUPVA-SULUT-2021-043',
+            entityShort: 'Dua Sisi',
+            location: 'Jl. Sam Ratulangi No. 88, Manado, Sulawesi Utara',
+            title: 'Perpanjangan Izin Usaha Berkala — Batas 24 Juni 2026',
+            shortTitle: 'Perpanjangan Izin',
+            status: 'Menunggu Pengajuan',
+            countdown: '2 Hari Tersisa',
+            countdownLabel: 'Batas Akhir Pengajuan: 24 Juni 2026 (Rabu)',
+            countdownType: 'warning',
+            law: 'PBI No. 18/20/PBI/2016',
+            lawDetail: 'Ketentuan Perpanjangan Izin Usaha Berkala KUPVA BB',
+            description: 'Penyelenggara KUPVA BB wajib mengajukan permohonan perpanjangan izin usaha secara tertulis kepada Bank Indonesia sebelum masa berlaku izin operasional 5 (lima) tahun berakhir. PT Dua Sisi Sentosa harus menyerahkan seluruh kelengkapan dokumen perpanjangan sebelum tanggal 24 Juni 2026 agar tidak terkena sanksi administratif pembekuan izin usaha.',
+            checklist: [
+                { done: true,  item: 'Surat Permohonan Perpanjangan Resmi (kop surat PT)' },
+                { done: true,  item: 'Akta PT & Anggaran Dasar Terakhir (pengesahan Kemenkumham)' },
+                { done: false, item: 'Bukti Kepatuhan Pelaporan LKU — 2 Periode Terakhir' },
+                { done: false, item: 'Sertifikasi Kompetensi SPPUR Seluruh Pengurus Aktif (PBI 21/16/PBI/2019)' },
+                { done: false, item: 'Dokumen Kebijakan Internal APU PPT terkini (PADG No. 15 Tahun 2025)' }
+            ],
+            sla: 85, slaColor: '#f59e0b',
+            namaDir: 'Michael Rindengan, SE',
+            modal: 'Rp 2.500.000.000',
+            cabang: '3 Kantor (Manado, Tomohon, Bitung)',
+            izinExpiry: '24 Juni 2026'
+        },
+        {
+            id: 'sulut-002',
+            day: 22,          /* HARI INI — 22 Juni 2026 — KRITIKAL */
+            type: 'critical',
+            kpiFilter: 'warnings',
+            badgeClass: 'badge-critical',
+            badgeIcon: 'fa-triangle-exclamation',
+            entity: 'PT Sentralindo Valutama',
+            entityId: 'KUPVA-SULUT-2019-008',
+            entityShort: 'Sentralindo',
+            location: 'Jl. Piere Tendean No. 120, Manado, Sulawesi Utara',
+            title: 'KRITIKAL — Deteksi APU/CFT: Pembawaan UKA > Rp 1 Miliar',
+            shortTitle: 'Deteksi AML/CFT',
+            status: 'Kritis — Investigasi Aktif',
+            countdown: 'Wajib LTKM ke PPATK: Maks. 3 Hari Kerja',
+            countdownLabel: 'Batas Lapor: Jum\'at, 26 Juni 2026 — PBI No. 10/2024 Ps. 61',
+            countdownType: 'critical',
+            law: 'PBI No. 10 Tahun 2024 & PADG No. 15 Tahun 2025',
+            lawDetail: 'Penerapan APU PPT PPPSPM — Pelaporan LTKM ke PPATK',
+            description: 'Terdeteksi anomali transaksi Pembawaan Uang Kertas Asing (UKA) melebihi batas nominal ekuivalen Rp 1.250.000.000 tanpa disertai dokumen dasar (underlying) yang sah. Berdasarkan PBI No. 10 Tahun 2024 Pasal 61, entitas wajib menyampaikan Laporan Transaksi Keuangan Mencurigakan (LTKM) ke PPATK melalui aplikasi GRIPS paling lama 3 (tiga) hari kerja setelah penetapan status TKM oleh Pejabat Kepatuhan.',
+            amlDetails: {
+                nilaiTransaksi: 'Rp 1.250.000.000',
+                matauang: 'USD (setara ± USD 76.900)',
+                tglTransaksi: '22 Juni 2026, 09:47 WIB',
+                batasLapor: '26 Juni 2026 (3 Hari Kerja)',
+                aplikasi: 'GRIPS — Gateway PPATK',
+                pejabatKepatuhan: 'Theodorus Wenas, SE (PK Internal)'
+            },
+            sla: 100, slaColor: '#ef4444',
+            namaDir: 'Theodorus Wenas, SE',
+            modal: 'Rp 5.000.000.000',
+            cabang: '7 Kantor (Sulut)',
+            izinExpiry: '15 Maret 2027'
+        },
+        {
+            id: 'sulut-003',
+            day: 15,          /* LALU — 15 Juni 2026 — Menunggu Verifikasi BI */
+            type: 'submitted',
+            kpiFilter: 'pending',
+            badgeClass: 'badge-success',
+            badgeIcon: 'fa-check-circle',
+            entity: 'PT Haji La Tunrung',
+            entityId: 'KUPVA-SULSEL-2020-012',
+            entityShort: 'Haji La Tunrung',
+            location: 'HQ: Makassar (Sulsel) | Cabang Baru: Jl. Pierre Tendean No. 45, Manado (Sulut)',
+            title: 'Laporan Pembukaan Kantor Cabang Sulut — Menunggu Verifikasi BI',
+            shortTitle: 'Pembukaan Cabang Sulut',
+            status: 'Berkas Diterima — Menunggu Konfirmasi BI',
+            countdown: 'Diserahkan 15 Juni 2026 — 7 Hari Lalu',
+            countdownLabel: 'Estimasi Konfirmasi BI KPwDN: 25 Juni — 2 Juli 2026',
+            countdownType: 'pending',
+            law: 'SE No. 18/42/DKSP Halaman 16',
+            lawDetail: 'Prosedur Laporan Realisasi Operasional Kantor Cabang Baru',
+            description: 'Penyelenggara KUPVA BB wajib memulai kegiatan usaha fisik di kantor cabang baru maksimal 30 (tiga puluh) hari kalender sejak tanggal izin BI diterbitkan, dan menyampaikan laporan tertulis realisasi dimulainya operasional kepada Kantor Perwakilan BI paling lambat 10 (sepuluh) hari kerja sejak operasional dimulai. PT Haji La Tunrung telah menyerahkan laporan realisasi pada 15 Juni 2026 dan sedang menunggu konfirmasi resmi dari BI KPwDN Sulawesi Utara.',
+            branchDetails: {
+                tglIzinBI: '2 Juni 2026',
+                tglMulaiOps: '10 Juni 2026',
+                tglLaporDiserahkan: '15 Juni 2026',
+                alamatCabang: 'Jl. Pierre Tendean No. 45, Wenang, Manado 95111',
+                kepalaCabang: 'Dr. Rahman Hakim, SE, MM (SPPUR Certified)'
+            },
+            checklist: [
+                { done: true,  item: 'Surat permohonan izin pembukaan cabang ke BI KPw Sulawesi Utara' },
+                { done: true,  item: 'Dokumen studi kelayakan bisnis regional Sulawesi Utara' },
+                { done: true,  item: 'Bukti penguasaan kantor (kontrak sewa 5 tahun, Jl. Pierre Tendean)' },
+                { done: true,  item: 'Bukti kesiapan sistem IT & koneksi jaringan operasional' },
+                { done: true,  item: 'Sertifikat Kompetensi SPPUR Kepala Kantor Cabang' },
+                { done: false, item: 'Konfirmasi & pengesahan tertulis dari BI KPwDN Sulut (MENUNGGU)' }
+            ],
+            sla: 40, slaColor: '#3b82f6',
+            namaDir: 'La Tunrung, SE (Direktur Utama)',
+            modal: 'Rp 7.500.000.000',
+            cabang: '9 Kantor + 1 Cabang Baru (Sulut)',
+            izinExpiry: '10 Agustus 2028'
+        },
+        {
+            id: 'sulut-004',
+            day: 29,          /* MENDATANG — 29 Juni 2026 — Milestone Pengajuan Baru */
+            type: 'incoming',
+            kpiFilter: 'pending',
+            badgeClass: 'badge-info',
+            badgeIcon: 'fa-file-circle-plus',
+            entity: 'PT Wale Bunaken',
+            entityId: 'KUPVA-SULUT-2026-NEW',
+            entityShort: 'Wale Bunaken',
+            location: 'Jl. Wolter Monginsidi No. 22, Manado, Sulawesi Utara (Rencana)',
+            title: 'Permohonan Izin Usaha Baru — Milestone Pengajuan 29 Juni 2026',
+            shortTitle: 'Izin Usaha Baru',
+            status: 'Persiapan Dokumen Administrasi',
+            countdown: 'Milestone Pengajuan: 29 Juni 2026 (7 Hari)',
+            countdownLabel: 'SE No. 18/42/DKSP Lampiran Berkas Perizinan',
+            countdownType: 'info',
+            law: 'SE No. 18/42/DKSP & PBI No. 18/20/PBI/2016',
+            lawDetail: 'Persyaratan Administratif Permohonan Izin Usaha Baru KUPVA BB',
+            description: 'PT Wale Bunaken sedang mempersiapkan pengajuan permohonan izin usaha baru sebagai penyelenggara KUPVA BB di wilayah Manado, Sulawesi Utara. Berdasarkan SE No. 18/42/DKSP, seluruh kelengkapan dokumen persyaratan wajib dipenuhi sebelum berkas diajukan secara resmi kepada Bank Indonesia Kantor Perwakilan Sulawesi Utara pada milestone target 29 Juni 2026.',
+            checklist: [
+                { done: true,  item: 'Struktur PT (Perseroan Terbatas) — badan hukum single-purpose mandiri' },
+                { done: true,  item: 'Pemenuhan Modal Disetor Minimum wilayah Sulut (≥ Rp 1.000.000.000)' },
+                { done: false, item: 'Jadwal Fit and Proper Test Direksi & Komisaris di BI KPwDN Sulut' },
+                { done: false, item: 'Sertifikasi Kompetensi SPPUR Kepala Kantor (PBI No. 21/16/PBI/2019)' },
+                { done: false, item: 'Dokumen Kebijakan Internal APU PPT & IRA (PADG No. 15 Tahun 2025)' },
+                { done: false, item: 'Studi Kelayakan Bisnis & Proyeksi Neraca 2 Tahun ke Depan' }
+            ],
+            sla: 10, slaColor: '#00e5ff',
+            namaDir: 'Fredy Tumewu, SH (Calon Direktur)',
+            modal: 'Rp 1.000.000.000 (Modal Minimum)',
+            cabang: '1 Kantor Pusat (Rencana)',
+            izinExpiry: 'Belum Berlaku (Permohonan Baru)'
+        }
+    ],
+
+    /* ADDITIONAL CALENDAR EVENTS */
+    additionalEvents: [
+        { day: 3,  type: 'outgoing', badgeClass: 'badge-outgoing',   badgeIcon: 'fa-arrow-up',     entityShort: 'Arthaindo',     shortTitle: 'SP1 Otomatis',       title: 'Pemicu SP1 Otomatis — LKU Mei Terlambat',         status: 'Overdue',    entity: 'Arthaindo Valas Manado',  law: 'PADG No. 23/37/PADG/2021', desc: 'Surat Peringatan I (SP1) diterbitkan otomatis akibat keterlambatan LKU Bulanan Mei 2026 melebihi 7 hari kerja dari batas tanggal 15.' },
+        { day: 10, type: 'success',  badgeClass: 'badge-success',    badgeIcon: 'fa-check',         entityShort: 'Borneo Valas',  shortTitle: 'FDL On-Site Selesai',title: 'Entry Meeting On-Site Inspection Selesai',        status: 'Completed',  entity: 'PT Borneo Valas Sulut',   law: 'PBI No. 18/20/PBI/2016', desc: 'Pemeriksaan lapangan (on-site inspection) oleh tim pengawas BI KPwDN Sulut telah diselesaikan. FDL diterima 1 hari kerja sebelum entry meeting sesuai ketentuan.' },
+        { day: 20, type: 'incoming', badgeClass: 'badge-incoming',   badgeIcon: 'fa-money-bill',    entityShort: 'Pacific FX',    shortTitle: 'LTKT Dilaporkan',   title: 'Pelaporan LTKT Transaksi Tunai > Threshold',       status: 'Completed',  entity: 'Pacific Exchange Sulut',  law: 'PBI No. 10 Tahun 2024 Ps. 62', desc: 'LTKT berhasil dikirimkan ke PPATK via GRIPS dalam batas 14 hari kerja sejak transaksi tunai senilai Rp 780.000.000 dilakukan pada 2 Juni 2026.' },
+        { day: 30, type: 'incoming', badgeClass: 'badge-incoming',   badgeIcon: 'fa-file-lines',    entityShort: 'Multi Entitas', shortTitle: 'LKU Bulanan Jatuh', title: 'Batas Akhir LKU Bulanan Juni 2026 (15 Juli)',      status: 'Upcoming',   entity: 'Semua KUPVA BB Sulut',    law: 'SE No. 18/42/DKSP Hal. 34', desc: 'LKU Bulanan Juni 2026 jatuh tempo paling lambat tanggal 15 Juli 2026 untuk seluruh KUPVA BB terdaftar di wilayah pengawasan KPwBI Sulawesi Utara.' }
+    ],
+
+    /* MASTER ENTITIES */
+    masterEntities: [
+        { id: 'KUPVA-SULUT-2021-043', name: 'PT Dua Sisi Sentosa',    location: 'Manado',          status: 'Aktif',               cabang: '3 Kantor',                      modal: 'Rp 2.500.000.000', risiko: 'Sedang',  namaDir: 'Michael Rindengan, SE',       izinExpiry: '24 Juni 2026'    },
+        { id: 'KUPVA-SULUT-2019-008', name: 'PT Sentralindo Valutama',location: 'Manado',          status: 'Pengawasan Khusus',   cabang: '7 Kantor',                      modal: 'Rp 5.000.000.000', risiko: 'Tinggi',  namaDir: 'Theodorus Wenas, SE',         izinExpiry: '15 Maret 2027'   },
+        { id: 'KUPVA-SULSEL-2020-012', name: 'PT Haji La Tunrung',    location: 'Makassar + Sulut', status: 'Ekspansi Aktif',     cabang: '9 Kantor + 1 Baru',             modal: 'Rp 7.500.000.000', risiko: 'Rendah',  namaDir: 'La Tunrung, SE',              izinExpiry: '10 Agustus 2028' },
+        { id: 'KUPVA-SULUT-2026-NEW',  name: 'PT Wale Bunaken',       location: 'Manado (Rencana)', status: 'Permohonan Baru',   cabang: '1 Kantor (Rencana)',             modal: 'Rp 1.000.000.000', risiko: 'TBD',     namaDir: 'Fredy Tumewu, SH',            izinExpiry: 'Belum Berlaku'   },
+        { id: 'KUPVA-SULUT-2018-011',  name: 'Arthaindo Valas Manado',location: 'Manado',          status: 'Teguran Aktif',       cabang: '2 Kantor',                      modal: 'Rp 1.800.000.000', risiko: 'Sedang',  namaDir: 'James Polii, SE',             izinExpiry: '7 Desember 2026' },
+        { id: 'KUPVA-SULUT-2020-033',  name: 'Pacific Exchange Sulut',location: 'Bitung',          status: 'Aktif',               cabang: '4 Kantor',                      modal: 'Rp 3.200.000.000', risiko: 'Rendah',  namaDir: 'Stephanie Rompas, MM',        izinExpiry: '18 Februari 2025'}
+    ],
+
+    /* SANCTIONS PIPELINE */
+    sanctionsPipeline: [
+        { entity: 'PT Sentralindo Valutama', violation: 'Pembawaan UKA > Rp 1 Miliar Tanpa Underlying — TKM Terlanggar',    denda: 'Rp 25.000.000', status: 'Investigasi APU/PPT Aktif', deadline: 'Kritis — 3 Hari Kerja', tingkat: 'danger'  },
+        { entity: 'PT Dua Sisi Sentosa',     violation: 'Perpanjangan Izin Usaha Mendekati Batas Kadaluarsa 5 Tahun',        denda: 'TBD (Potensi Pembekuan)', status: 'Peringatan Dini Aktif',   deadline: '2 Hari Kerja (Mendesak)', tingkat: 'warning' },
+        { entity: 'Arthaindo Valas Manado',  violation: 'Keterlambatan Pelaporan LKU Bulanan > 7 Hari Kerja (Mei 2026)',    denda: 'Rp 3.500.000',  status: 'SP-1 Tertulis Diterbitkan', deadline: '30 Hari sejak SP1 terbit', tingkat: 'warning' },
+        { entity: 'Pacific Exchange Sulut',  violation: 'Pelaporan LTKT Terlambat > Threshold (Sudah Diselesaikan)',         denda: 'Rp 1.250.000',  status: 'Lunas — Kasus Ditutup',     deadline: 'Selesai',                 tingkat: 'success' }
+    ],
+
+    /* AML LOGS */
+    amlLogs: [
+        { entity: 'PT Sentralindo Valutama', type: 'TKM — Transaksi Keuangan Mencurigakan',       value: 'Rp 1.250.000.000 (UKA Terlanggar)',    date: '22 Juni 2026', status: 'Belum Melapor ke PPATK', sla: 'Maks. 3 Hari Kerja (26/06)',  risk: 'KRITIKAL' },
+        { entity: 'PT Haji La Tunrung',      type: 'LTKT — Transaksi Keuangan Tunai Besar',       value: 'Rp 850.000.000 (Setara USD 52.200)',   date: '18 Juni 2026', status: 'Telah Dilaporkan ke PPATK', sla: 'Tepat Waktu (< 14 Hari)',     risk: 'Sedang'   },
+        { entity: 'Pacific Exchange Sulut',  type: 'TKM — Dugaan Splitting Transaksi Valuta',     value: 'Ekuivalen USD 31.500 (Patah-patah)',   date: '19 Juni 2026', status: 'Diteruskan via GRIPS',      sla: 'Tepat Waktu (3 Hari)',        risk: 'Rendah'   },
+        { entity: 'Arthaindo Valas Manado',  type: 'CDD — Gagal Identifikasi Nasabah Berisiko',   value: 'Profil Nasabah Tidak Lengkap (3 TRX)', date: '15 Juni 2026', status: 'Dalam Klarifikasi Internal', sla: 'Melebihi SLA EDD (> 3 Hari)', risk: 'Sedang'   }
+    ],
+
+    /* WHATSAPP AUTOMATION LOG */
+    automationLogs: [
+        {
+            waktu: '22 Jun 2026 · 09:52 WIB',
+            entity: 'PT Sentralindo Valutama',
+            entityId: 'sulut-002',
+            deteksi: 'TKM KRITIKAL: Pembawaan UKA > Rp 1 Miliar Terdeteksi — SLA 3 Hari Kerja',
+            portalStatus: 'SP-Darurat Diterbitkan via Portal BI',
+            waStatus: 'WhatsApp Automated Reminder Delivered',
+            waDelivered: true,
+            pillClass: 'pill-danger'
+        },
+        {
+            waktu: '22 Jun 2026 · 08:30 WIB',
+            entity: 'PT Dua Sisi Sentosa',
+            entityId: 'sulut-001',
+            deteksi: 'IZIN USAHA MENDEKATI KADALUARSA: Perpanjangan Wajib Diajukan Sebelum 24 Juni 2026',
+            portalStatus: 'Reminder Otomatis Terkirim via Portal',
+            waStatus: 'WhatsApp Automated Reminder Delivered',
+            waDelivered: true,
+            pillClass: 'pill-warning'
+        },
+        {
+            waktu: '15 Jun 2026 · 16:10 WIB',
+            entity: 'PT Haji La Tunrung',
+            entityId: 'sulut-003',
+            deteksi: 'LAPORAN CABANG DITERIMA: Menunggu Konfirmasi BI KPwDN Sulut',
+            portalStatus: 'Konfirmasi Penerimaan Dokumen via Portal BI',
+            waStatus: 'WhatsApp Konfirmasi Penerimaan Terkirim',
+            waDelivered: true,
+            pillClass: 'pill-info'
+        },
+        {
+            waktu: '22 Jun 2026 · 07:00 WIB',
+            entity: 'PT Wale Bunaken',
+            entityId: 'sulut-004',
+            deteksi: 'MILESTONE PENGAJUAN: Checklist Persiapan Dokumen Izin Baru Belum 100%',
+            portalStatus: 'Notifikasi Checklist Belum Lengkap via Portal',
+            waStatus: 'WhatsApp Reminder Persiapan Dokumen Terkirim',
+            waDelivered: true,
+            pillClass: 'pill-cyan'
+        },
+        {
+            waktu: '03 Jun 2026 · 08:00 WIB',
+            entity: 'Arthaindo Valas Manado',
+            entityId: null,
+            deteksi: 'SLA LKU TERLANGGAR: Laporan Mei 2026 Terlambat > 7 Hari Kerja',
+            portalStatus: 'SP-1 Tertulis Diterbitkan Otomatis via Portal BI',
+            waStatus: 'WhatsApp SP1 Reminder Terkirim',
+            waDelivered: true,
+            pillClass: 'pill-warning'
+        }
+    ]
+};
+
+/* ================================================================
+   UTILITY FUNCTIONS
+================================================================ */
+function showToast(message, type = 'success', title = null, duration = 4000) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    const icons = { success: 'fa-circle-check', wa: 'fa-brands fa-whatsapp', danger: 'fa-circle-exclamation', info: 'fa-circle-info' };
+    const icon = icons[type] || icons.success;
+    toast.className = `toast-card toast-${type}`;
+    toast.innerHTML = `
+        <i class="fa-solid ${icon} toast-icon"></i>
+        <div class="toast-body">
+            ${title ? `<strong>${title}</strong>` : ''}
+            ${message}
+        </div>
+    `;
+    container.appendChild(toast);
+    if (duration) {
+        setTimeout(() => {
+            toast.style.animation = 'toastOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
+}
+
+function getSlaBarColor(pct) {
+    if (pct >= 80) return '#ef4444';
+    if (pct >= 50) return '#f59e0b';
+    return '#10b981';
+}
+
+function getPillClass(risiko) {
+    if (risiko === 'Tinggi' || risiko === 'KRITIKAL') return 'pill-danger';
+    if (risiko === 'Sedang') return 'pill-warning';
+    if (risiko === 'Rendah') return 'pill-success';
+    return 'pill-neutral';
+}
+
+function getScenarioByEntity(entityName) {
+    return DB.scenarios.find(s => s.entity === entityName);
+}
+
+/* ================================================================
+   MODULE SWITCHER
+================================================================ */
+function switchModule(mod) {
+    document.querySelectorAll('.menu-item').forEach(li => li.classList.remove('active'));
+    document.getElementById(`menu-${mod}`).classList.add('active');
+    document.getElementById('breadcrumb-active').textContent = {
+        tracker: 'KUPVA BB Tracker', exec: 'Dashboard Eksekutif',
+        master: 'Data Master Entitas', sanctions: 'Sanksi & Penegakan',
+        aml: 'Matriks APU/PPT'
+    }[mod];
+    currentModule = mod;
+    document.getElementById('btn-back-calendar').classList.add('d-none');
+    document.getElementById('workspace-toolbar').style.display = 'flex';
+    currentKpiFilter = null;
+    document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('kpi-active'));
+
+    if (mod === 'tracker') renderTrackerModule();
+    else if (mod === 'exec')     renderExecModule();
+    else if (mod === 'master')   renderMasterModule();
+    else if (mod === 'sanctions') renderSanctionsModule();
+    else if (mod === 'aml')      renderAmlModule();
+}
+
+/* ================================================================
+   TRACKER MODULE — CORE
+================================================================ */
+function renderTrackerModule() {
+    document.getElementById('workspace-title').textContent = 'Kalender Kepatuhan KUPVA BB — Juni 2026';
+    renderKpiCards();
+    resetToTrackerDefault();
+}
+
+function renderKpiCards() {
+    document.getElementById('kpi-matrix-section').innerHTML = `
+        <div class="metric-card" id="card-pending" onclick="toggleKpiFilter('pending', this)">
+            <div class="metric-card-left">
+                <p class="metric-label">Laporan Belum Dikirim / Pending</p>
+                <p class="metric-value" style="color:#60a5fa;">2</p>
+                <p class="metric-sub">PT Haji La Tunrung & PT Wale Bunaken</p>
+            </div>
+            <div class="metric-icon icon-pending"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        </div>
+        <div class="metric-card" id="card-upcoming" onclick="toggleKpiFilter('upcoming', this)">
+            <div class="metric-card-left">
+                <p class="metric-label">Batas Waktu Pekan Ini (SLA)</p>
+                <p class="metric-value" style="color:#fbbf24;">1</p>
+                <p class="metric-sub">PT Dua Sisi Sentosa — 24 Juni 2026</p>
+            </div>
+            <div class="metric-icon icon-upcoming"><i class="fa-solid fa-hourglass-half"></i></div>
+        </div>
+        <div class="metric-card" id="card-warnings" onclick="toggleKpiFilter('warnings', this)">
+            <div class="metric-card-left">
+                <p class="metric-label">Peringatan Belum Terselesaikan</p>
+                <p class="metric-value text-critical">1</p>
+                <p class="metric-sub">PT Sentralindo Valutama — AML Kritis</p>
+            </div>
+            <div class="metric-icon icon-warnings"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        </div>
+        <div class="metric-card" id="card-total" onclick="resetToTrackerDefault()">
+            <div class="metric-card-left">
+                <p class="metric-label">Total KUPVA BB Diawasi (Sulut)</p>
+                <p class="metric-value" style="color:var(--accent-cyan);">6</p>
+                <p class="metric-sub">KPwBI Sulawesi Utara · Juni 2026</p>
+            </div>
+            <div class="metric-icon icon-total"><i class="fa-solid fa-shield-halved"></i></div>
+        </div>
+    `;
+}
+
+/* ================================================================
+   CALENDAR ENGINE — JUNE 2026
+   Juni 2026: Hari 1 = Senin → Offset = 0 (grid Mon–Sun)
+================================================================ */
+function resetToTrackerDefault() {
+    document.getElementById('btn-back-calendar').classList.add('d-none');
+    document.getElementById('workspace-title').textContent = 'Kalender Kepatuhan KUPVA BB — Juni 2026';
+    document.getElementById('workspace-toolbar').style.display = 'flex';
+    currentKpiFilter = null;
+    document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('kpi-active'));
+    renderJuneCalendar();
+    setPanelDefault();
+}
+
+function renderJuneCalendar() {
+    /* All events (scenarios + additional) keyed by day */
+    const eventsByDay = {};
+    DB.scenarios.forEach(s => {
+        if (!eventsByDay[s.day]) eventsByDay[s.day] = [];
+        eventsByDay[s.day].push({ ...s, isScenario: true });
+    });
+    DB.additionalEvents.forEach(e => {
+        if (!eventsByDay[e.day]) eventsByDay[e.day] = [];
+        eventsByDay[e.day].push({ ...e, isScenario: false });
+    });
+
+    /* Build day cells — Juni 2026: 1 Jun = Senin, 30 days, 5 rows */
+    let dayCells = '';
+    const weekendIndices = [5, 6]; /* Sab, Min (0-indexed from Mon) */
+
+    for (let d = 1; d <= 30; d++) {
+        const dayOfWeek = (d - 1) % 7; /* 0=Sen, 1=Sel, ..., 6=Min */
+        const isToday   = d === TODAY_DAY;
+        const isWeekend = weekendIndices.includes(dayOfWeek);
+        const events    = eventsByDay[d] || [];
+
+        let dayClass = 'cal-day';
+        if (isToday)   dayClass += ' cal-today';
+        if (isWeekend) dayClass += ' cal-weekend';
+
+        let todayBannerHTML = '';
+        let todayChipHTML = '';
+        if (isToday) {
+            todayBannerHTML = `<div class="today-monitoring-banner">📡 TODAY'S ACTIVE MONITORING MATRIX — ${TODAY_DOW}, ${TODAY_DAY} ${TODAY_MONTH} ${TODAY_YEAR}</div>`;
+            todayChipHTML = `<span class="today-chip">HARI INI</span>`;
+        }
+
+        let badgesHTML = events.map(ev => {
+            const scId = ev.isScenario ? ev.id : `extra-${ev.day}`;
+            return `<div class="ev-badge ${ev.badgeClass}" onclick="handleEventClick('${scId}', event)">
+                        <i class="fa-solid ${ev.badgeIcon}"></i>
+                        <span>${ev.entityShort}: ${ev.shortTitle}</span>
+                    </div>`;
+        }).join('');
+
+        dayCells += `
+            <div class="${dayClass}">
+                ${todayBannerHTML}
+                <div class="day-num">${d}${todayChipHTML}</div>
+                ${badgesHTML}
+            </div>`;
+    }
+
+    /* Empty trailing cells to complete the grid (30 days → 5 rows of 7 = 35, need 5 blank) */
+    for (let i = 0; i < 5; i++) {
+        dayCells += `<div class="cal-day cal-empty"></div>`;
+    }
+
+    document.getElementById('dynamic-module-workspace').innerHTML = `
+        <div class="calendar-shell">
+            <div class="calendar-header">
+                <div>
+                    <div class="calendar-header-title">
+                        <i class="fa-solid fa-calendar-days" style="color:var(--accent-cyan);margin-right:8px;"></i>
+                        Kalender Surveillance KUPVA BB — Juni 2026
+                    </div>
+                    <div class="calendar-header-meta" style="margin-top:4px;">
+                        KPwBI Sulawesi Utara · Sistem Aktif per ${TODAY_DOW}, ${TODAY_DAY} ${TODAY_MONTH} ${TODAY_YEAR} · 4 Skenario Sulut Terpetakan
+                    </div>
+                </div>
+                <div class="cal-legend">
+                    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--red);"></div>Kritikal AML</div>
+                    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--yellow);"></div>Batas Waktu</div>
+                    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--green);"></div>Selesai/Pending BI</div>
+                    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--blue);"></div>Milestone Baru</div>
+                </div>
+            </div>
+            <div class="cal-weekdays">
+                <div class="cal-weekday">SEN</div><div class="cal-weekday">SEL</div>
+                <div class="cal-weekday">RAB</div><div class="cal-weekday">KAM</div>
+                <div class="cal-weekday">JUM</div>
+                <div class="cal-weekday" style="color:var(--text-dim);">SAB</div>
+                <div class="cal-weekday" style="color:var(--text-dim);">MIN</div>
+            </div>
+            <div class="cal-days">${dayCells}</div>
+        </div>
+    `;
+}
+
+function handleEventClick(scId, e) {
+    e.stopPropagation();
+    const sc = DB.scenarios.find(s => s.id === scId);
+    if (sc) { loadScenarioPanel(sc); return; }
+    /* Additional events — show brief panel */
+    const extra = DB.additionalEvents.find(ev => `extra-${ev.day}` === scId);
+    if (extra) loadExtraEventPanel(extra);
+}
+
+/* ================================================================
+   KPI CARD FILTER ENGINE
+================================================================ */
+function toggleKpiFilter(filterType, cardEl) {
+    if (currentKpiFilter === filterType) { resetToTrackerDefault(); return; }
+    currentKpiFilter = filterType;
+
+    document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('kpi-active'));
+    cardEl.classList.add('kpi-active');
+    document.getElementById('btn-back-calendar').classList.remove('d-none');
+    document.getElementById('workspace-toolbar').style.display = 'none';
+
+    if (filterType === 'pending') {
+        document.getElementById('workspace-title').textContent = 'Filter: Laporan Menunggu Penyerahan / Verifikasi BI';
+        renderPendingTable();
+        const sc = DB.scenarios.find(s => s.id === 'sulut-003');
+        if (sc) loadScenarioPanel(sc);
+    } else if (filterType === 'upcoming') {
+        document.getElementById('workspace-title').textContent = 'Filter: Batas Waktu SLA Pekan Ini — Mendesak';
+        renderUpcomingTable();
+        const sc = DB.scenarios.find(s => s.id === 'sulut-001');
+        if (sc) loadScenarioPanel(sc);
+    } else if (filterType === 'warnings') {
+        document.getElementById('workspace-title').textContent = 'Filter: Antrean Peringatan Kritis — Investigasi Aktif';
+        renderWarningsQueue();
+        const sc = DB.scenarios.find(s => s.id === 'sulut-002');
+        if (sc) loadScenarioPanel(sc);
+    }
+}
+
+/* --- PENDING SUBMISSIONS TABLE --- */
+function renderPendingTable() {
+    const items = DB.scenarios.filter(s => s.kpiFilter === 'pending');
+    const rows = items.map(s => `
+        <tr onclick="loadScenarioPanel(DB.scenarios.find(x=>x.id==='${s.id}'))">
+            <td>
+                <span class="entity-name">${s.entity}</span>
+                <span class="entity-id">${s.entityId}</span>
+                <span class="entity-location"><i class="fa-solid fa-location-dot" style="font-size:9px;color:var(--accent-cyan);"></i> ${s.location.split('|')[0].trim()}</span>
+            </td>
+            <td><strong style="color:#fff;">${s.title}</strong></td>
+            <td><span class="mono-text">${s.law}</span></td>
+            <td>
+                ${s.day <= TODAY_DAY
+                    ? `<span class="pill pill-info"><span class="pill-dot" style="background:#60a5fa;"></span>Diserahkan ${s.day} ${TODAY_MONTH}</span>`
+                    : `<span class="pill pill-cyan"><span class="pill-dot" style="background:var(--accent-cyan);"></span>Milestone: ${s.day} ${TODAY_MONTH}</span>`
+                }
+            </td>
+            <td>
+                <div class="sla-bar-wrap">
+                    <div class="sla-bar"><div class="sla-bar-fill" style="width:${s.sla}%;background:${s.slaColor};"></div></div>
+                    <span class="sla-pct" style="color:${s.slaColor};">${s.sla}%</span>
+                </div>
+            </td>
+            <td>
+                <button class="toolbar-btn" style="font-size:11px;padding:6px 10px;" onclick="event.stopPropagation();showToast('Detail ${s.entity} dimuat di panel kanan.','info','Navigasi',2000)">
+                    <i class="fa-solid fa-arrow-right"></i> Detail
+                </button>
+            </td>
+        </tr>
+    `).join('');
+
+    document.getElementById('dynamic-module-workspace').innerHTML = `
+        <div class="list-shell">
+            <div class="list-shell-header">
+                <div class="list-shell-title">
+                    <i class="fa-solid fa-clock-rotate-left" style="color:#60a5fa;"></i>
+                    Laporan Belum Dikirim / Menunggu Penyerahan ke BI
+                    <span class="list-shell-count">${items.length} Entitas</span>
+                </div>
+                <span style="font-size:11px;color:var(--text-muted);">Data per ${TODAY_DOW}, ${TODAY_DAY} ${TODAY_MONTH} ${TODAY_YEAR}</span>
+            </div>
+            <table class="data-table">
+                <thead><tr>
+                    <th>Entitas KUPVA BB</th><th>Nama Kewajiban / Berkas</th>
+                    <th>Dasar Hukum Utama</th><th>Status Penyerahan</th>
+                    <th>Progres SLA</th><th>Aksi</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+        <div style="padding:14px 18px;background:var(--blue-bg);border:1px solid var(--blue-b);border-radius:var(--radius-md);font-size:12px;color:#60a5fa;display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-circle-info"></i>
+            <span><strong>Informasi:</strong> Tabel ini menampilkan KUPVA BB yang berkas/laporannya masih dalam proses penyerahan ke BI atau sedang menunggu konfirmasi verifikasi dari Kantor Perwakilan BI Sulawesi Utara.</span>
+        </div>
+    `;
+}
+
+/* --- UPCOMING DEADLINES TABLE --- */
+function renderUpcomingTable() {
+    const items = DB.scenarios.filter(s => s.kpiFilter === 'upcoming');
+    const rows = items.map(s => `
+        <tr onclick="loadScenarioPanel(DB.scenarios.find(x=>x.id==='${s.id}'))">
+            <td>
+                <span class="entity-name">${s.entity}</span>
+                <span class="entity-id">${s.entityId}</span>
+            </td>
+            <td><strong style="color:#fff;">${s.title}</strong></td>
+            <td>
+                <span class="pill pill-warning">
+                    <i class="fa-solid fa-calendar-xmark" style="font-size:10px;"></i>
+                    ${s.day} ${TODAY_MONTH} ${TODAY_YEAR}
+                </span>
+            </td>
+            <td>
+                <div class="countdown-box type-warning" style="padding:10px 12px;">
+                    <i class="fa-solid fa-hourglass-half countdown-icon" style="font-size:16px;"></i>
+                    <div>
+                        <div class="countdown-time" style="font-size:13px;">${s.countdown}</div>
+                        <div class="countdown-sub" style="font-size:10px;">${s.countdownLabel}</div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="mono-text">${s.law}</span></td>
+            <td>
+                <button class="btn-wa-resend" onclick="event.stopPropagation();triggerWhatsAppAlert('${s.entity}')">
+                    <i class="fa-brands fa-whatsapp"></i> Kirim Reminder
+                </button>
+            </td>
+        </tr>
+    `).join('');
+
+    document.getElementById('dynamic-module-workspace').innerHTML = `
+        <div class="list-shell">
+            <div class="list-shell-header">
+                <div class="list-shell-title">
+                    <i class="fa-solid fa-hourglass-half" style="color:#fbbf24;"></i>
+                    Batas Waktu SLA Mendekati — Pekan Ini
+                    <span class="list-shell-count" style="background:var(--yellow-bg);color:#fbbf24;">${items.length} Tugas</span>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead><tr>
+                    <th>Entitas KUPVA BB</th><th>Nama Kewajiban SLA</th>
+                    <th>Tanggal Jatuh Tempo</th><th>Countdown Real-Time</th>
+                    <th>Dasar Hukum</th><th>Eskalasi WhatsApp</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+/* --- UNRESOLVED WARNINGS QUEUE --- */
+function renderWarningsQueue() {
+    const items = DB.scenarios.filter(s => s.kpiFilter === 'warnings');
+    const rows = items.map(s => `
+        <tr onclick="loadScenarioPanel(DB.scenarios.find(x=>x.id==='${s.id}'))">
+            <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:36px;height:36px;border-radius:50%;background:var(--red-bg);border:1px solid var(--red-b);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="fa-solid fa-triangle-exclamation" style="color:#f87171;font-size:14px;"></i>
+                    </div>
+                    <div>
+                        <span class="entity-name">${s.entity}</span>
+                        <span class="entity-id">${s.entityId}</span>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="pill pill-danger" style="font-size:12px;padding:6px 12px;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> ${s.shortTitle}
+                </span>
+            </td>
+            <td>
+                <div class="countdown-box type-critical" style="padding:10px 12px;">
+                    <i class="fa-solid fa-clock-four countdown-icon" style="font-size:16px;"></i>
+                    <div>
+                        <div class="countdown-time" style="font-size:12px;">${s.countdown}</div>
+                        <div class="countdown-sub" style="font-size:10px;">${s.countdownLabel}</div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="mono-text">${s.law}</span></td>
+            <td>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                    <button class="btn-wa-resend" onclick="event.stopPropagation();triggerWhatsAppAlert('${s.entity}')">
+                        <i class="fa-brands fa-whatsapp"></i> Kirim Darurat
+                    </button>
+                    <button class="panel-btn panel-btn-danger" style="width:auto;padding:6px 10px;font-size:11px;" onclick="event.stopPropagation();showToast('Berkas investigasi dikirim ke PPATK via GRIPS API.','danger','Eskalasi PPATK',3000)">
+                        <i class="fa-solid fa-gavel"></i> Eskalasi
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+
+    document.getElementById('dynamic-module-workspace').innerHTML = `
+        <div style="background:var(--red-bg);border:1px solid var(--red-b);border-radius:var(--radius-md);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;">
+            <i class="fa-solid fa-circle-exclamation" style="color:#f87171;font-size:18px;flex-shrink:0;"></i>
+            <span style="font-size:12px;color:#fca5a5;"><strong>PERINGATAN KRITIS AKTIF:</strong> Terdapat ${items.length} entitas dengan pelanggaran batas SLA yang memerlukan tindak lanjut segera. Pelaporan LTKM ke PPATK wajib diselesaikan dalam 3 hari kerja sejak penetapan status TKM.</span>
+        </div>
+        <div class="list-shell">
+            <div class="list-shell-header">
+                <div class="list-shell-title">
+                    <i class="fa-solid fa-triangle-exclamation" style="color:#f87171;animation:textPulse 1.5s ease-in-out infinite;"></i>
+                    Antrean Peringatan Kritis — Investigasi & Tindak Lanjut Diperlukan
+                    <span class="list-shell-count" style="background:var(--red-bg);color:#f87171;border:1px solid var(--red-b);">${items.length} Kasus</span>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead><tr>
+                    <th>Entitas Pelanggar</th><th>Jenis Pelanggaran SLA</th>
+                    <th>Countdown Batas Regulasi</th><th>Dasar Hukum</th>
+                    <th>Aksi Eskalasi</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+/* ================================================================
+   RIGHT PANEL LOADERS — PER SCENARIO
+================================================================ */
+function loadScenarioPanel(sc) {
+    if (!sc) return;
+    document.getElementById('panel-tag').textContent = `SKENARIO ${sc.id.split('-')[1].toUpperCase()} — ${sc.type.toUpperCase()}`;
+    document.getElementById('panel-title').textContent = sc.entity;
+    document.getElementById('panel-sub').innerHTML = `<i class="fa-solid fa-map-marker-alt"></i>&nbsp;&nbsp;${sc.location.substring(0, 55)}${sc.location.length > 55 ? '…' : ''}`;
+
+    let bodyHtml = '';
+
+    /* 1. COUNTDOWN BOX */
+    bodyHtml += `
+        <div class="countdown-box type-${sc.countdownType}">
+            <i class="fa-solid ${sc.badgeIcon} countdown-icon"></i>
+            <div>
+                <div class="countdown-time">${sc.countdown}</div>
+                <div class="countdown-sub">${sc.countdownLabel}</div>
+            </div>
+        </div>
+    `;
+
+    /* 2. LEGAL BASIS CARD */
+    bodyHtml += `
+        <div>
+            <div class="detail-group-label"><i class="fa-solid fa-gavel" style="font-size:10px;"></i>Regulasi & Dasar Hukum</div>
+            <div class="legal-card">
+                <div class="legal-card-title">${sc.law}</div>
+                <div class="legal-card-desc">${sc.description}</div>
+                <div class="legal-card-ref"><i class="fa-solid fa-link"></i>${sc.lawDetail}</div>
+            </div>
+        </div>
+    `;
+
+    /* 3. SCENARIO-SPECIFIC CONTENT */
+    if (sc.id === 'sulut-001') {
+        /* License Renewal */
+        bodyHtml += buildChecklistHtml('Checklist Dokumen Perpanjangan Izin', sc.checklist);
+        bodyHtml += `
+            <div class="branch-info-grid">
+                <div class="branch-info-cell"><div class="branch-info-key">Masa Berlaku Izin</div><div class="branch-info-val" style="color:#fbbf24;">5 Tahun</div></div>
+                <div class="branch-info-cell"><div class="branch-info-key">Kadaluarsa</div><div class="branch-info-val" style="color:#f87171;">${sc.izinExpiry}</div></div>
+                <div class="branch-info-cell"><div class="branch-info-key">Direktur Utama</div><div class="branch-info-val">${sc.namaDir}</div></div>
+                <div class="branch-info-cell"><div class="branch-info-key">Modal Disetor</div><div class="branch-info-val" style="color:var(--accent-cyan);">${sc.modal}</div></div>
+            </div>
+            <div style="background:var(--yellow-bg);border:1px solid var(--yellow-b);border-radius:var(--radius-md);padding:12px 14px;font-size:11.5px;color:#fbbf24;">
+                <strong><i class="fa-solid fa-circle-exclamation"></i>&nbsp;Peringatan Regulasi:</strong><br>
+                <span style="color:var(--text-muted);margin-top:4px;display:block;">Kegagalan mengajukan perpanjangan sebelum jatuh tempo dapat mengakibatkan pembekuan izin usaha dan denda administratif harian berdasarkan PBI No. 18/20/PBI/2016.</span>
+            </div>
+        `;
+        bodyHtml += `
+            <button class="panel-btn panel-btn-teal" onclick="triggerWhatsAppAlert('${sc.entity}')">
+                <i class="fa-brands fa-whatsapp"></i> Kirim Reminder Urgent via WhatsApp
+            </button>
+        `;
+    }
+
+    else if (sc.id === 'sulut-002') {
+        /* AML/CFT Detection */
+        const a = sc.amlDetails;
+        bodyHtml += `
+            <div>
+                <div class="detail-group-label"><i class="fa-solid fa-shield-halved" style="font-size:10px;"></i>Detail Transaksi Mencurigakan (TKM)</div>
+                <div class="aml-transaction-box">
+                    <div class="aml-tx-title"><i class="fa-solid fa-triangle-exclamation"></i>ANOMALI TRANSAKSI TERDETEKSI — LTKM WAJIB</div>
+                    <div class="aml-tx-row"><span class="aml-tx-key">Nilai Transaksi UKA</span><span class="aml-tx-val critical">${a.nilaiTransaksi}</span></div>
+                    <div class="aml-tx-row"><span class="aml-tx-key">Setara Mata Uang</span><span class="aml-tx-val">${a.matauang}</span></div>
+                    <div class="aml-tx-row"><span class="aml-tx-key">Tanggal & Waktu</span><span class="aml-tx-val">${a.tglTransaksi}</span></div>
+                    <div class="aml-tx-row"><span class="aml-tx-key">Batas Lapor PPATK</span><span class="aml-tx-val critical">${a.batasLapor}</span></div>
+                    <div class="aml-tx-row"><span class="aml-tx-key">Aplikasi Pelaporan</span><span class="aml-tx-val">${a.aplikasi}</span></div>
+                    <div class="aml-tx-row"><span class="aml-tx-key">Pejabat Kepatuhan</span><span class="aml-tx-val">${a.pejabatKepatuhan}</span></div>
+                </div>
+            </div>
+        `;
+        bodyHtml += `
+            <div style="background:rgba(239,68,68,0.05);border:1px solid var(--red-b);border-radius:var(--radius-md);padding:12px 14px;font-size:11.5px;color:var(--text-muted);">
+                <strong style="color:#f87171;"><i class="fa-solid fa-ban"></i>&nbsp;Larangan Tipping-Off:</strong><br>
+                Dilarang keras memberitahukan nasabah terkait bahwa transaksinya sedang diinvestigasi atau dilaporkan. Berlaku mutlak berdasarkan PBI No. 10 Tahun 2024 & PADG No. 15 Tahun 2025.
+            </div>
+        `;
+        bodyHtml += `
+            <button class="panel-btn panel-btn-danger" onclick="showToast('Berkas investigasi LTKM dikirimkan ke Hub PPATK via jalur API GRIPS Secure. Ref: TKM/SULUT/2026/001.','danger','Eskalasi LTKM ke PPATK',5000)">
+                <i class="fa-solid fa-paper-plane"></i> Eskalasi LTKM ke PPATK via GRIPS
+            </button>
+            <button class="panel-btn panel-btn-ghost" onclick="triggerWhatsAppAlert('${sc.entity}')">
+                <i class="fa-brands fa-whatsapp"></i> Kirim Alert Darurat via WhatsApp
+            </button>
+        `;
+    }
+
+    else if (sc.id === 'sulut-003') {
+        /* Branch Opening */
+        const b = sc.branchDetails;
+        bodyHtml += `
+            <div>
+                <div class="detail-group-label"><i class="fa-solid fa-building" style="font-size:10px;"></i>Detail Realisasi Pembukaan Cabang</div>
+                <div class="branch-info-grid">
+                    <div class="branch-info-cell"><div class="branch-info-key">Tgl Izin BI Diterbitkan</div><div class="branch-info-val" style="color:var(--accent-cyan);">${b.tglIzinBI}</div></div>
+                    <div class="branch-info-cell"><div class="branch-info-key">Tgl Mulai Operasional</div><div class="branch-info-val" style="color:#34d399;">${b.tglMulaiOps}</div></div>
+                    <div class="branch-info-cell"><div class="branch-info-key">Laporan Diserahkan</div><div class="branch-info-val" style="color:#34d399;">${b.tglLaporDiserahkan}</div></div>
+                    <div class="branch-info-cell"><div class="branch-info-key">Kepala Cabang</div><div class="branch-info-val" style="font-size:10.5px;">${b.kepalaCabang}</div></div>
+                </div>
+            </div>
+        `;
+        bodyHtml += `
+            <div>
+                <div class="detail-group-label" style="font-size:9.5px;">Alamat Kantor Cabang Baru</div>
+                <div style="background:rgba(8,18,30,0.4);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:11px 13px;font-size:12px;color:#fff;display:flex;gap:8px;align-items:flex-start;">
+                    <i class="fa-solid fa-location-dot" style="color:var(--accent-cyan);flex-shrink:0;margin-top:2px;"></i>
+                    ${b.alamatCabang}
+                </div>
+            </div>
+        `;
+        bodyHtml += buildChecklistHtml('Checklist Kelengkapan Dokumen Cabang', sc.checklist);
+        bodyHtml += `
+            <div style="background:var(--blue-bg);border:1px solid var(--blue-b);border-radius:var(--radius-md);padding:12px 14px;font-size:11.5px;color:#60a5fa;">
+                <strong><i class="fa-solid fa-clock"></i>&nbsp;Regulasi Waktu (SE No. 18/42/DKSP Hal. 16):</strong><br>
+                <span style="color:var(--text-muted);margin-top:4px;display:block;">Operasional fisik wajib dimulai maks. <strong style="color:#fff;">30 hari kalender</strong> sejak izin BI terbit. Laporan realisasi wajib disampaikan maks. <strong style="color:#fff;">10 hari kerja</strong> sejak operasional dimulai.</span>
+            </div>
+        `;
+    }
+
+    else if (sc.id === 'sulut-004') {
+        /* New License Application */
+        bodyHtml += buildChecklistHtml('Checklist Persyaratan Administratif Izin Baru (SE No. 18/42/DKSP)', sc.checklist);
+        bodyHtml += `
+            <div class="branch-info-grid">
+                <div class="branch-info-cell"><div class="branch-info-key">Calon Direktur</div><div class="branch-info-val" style="font-size:11px;">${sc.namaDir}</div></div>
+                <div class="branch-info-cell"><div class="branch-info-key">Modal Minimum</div><div class="branch-info-val" style="color:var(--accent-cyan);">${sc.modal}</div></div>
+            </div>
+            <div style="background:var(--accent-cyan-dim);border:1px solid rgba(0,229,255,.3);border-radius:var(--radius-md);padding:12px 14px;font-size:11.5px;color:var(--accent-cyan);">
+                <strong><i class="fa-solid fa-list-check"></i>&nbsp;Urutan Prosedur Pengajuan:</strong>
+                <ol style="margin-top:8px;color:var(--text-muted);padding-left:16px;display:flex;flex-direction:column;gap:4px;">
+                    <li>Ajukan surat permohonan ke BI KPwDN Sulut</li>
+                    <li>Ikuti jadwal Fit &amp; Proper Test Direksi &amp; Komisaris</li>
+                    <li>Selesaikan Sertifikasi SPPUR Kepala Kantor</li>
+                    <li>Realisasikan operasional maks. <strong style="color:#fff;">30 hari kalender</strong> sejak izin terbit</li>
+                    <li>Kirim Laporan Realisasi maks. <strong style="color:#fff;">10 hari kerja</strong> sejak operasional</li>
+                </ol>
+            </div>
+        `;
+        bodyHtml += `
+            <button class="panel-btn panel-btn-teal" onclick="triggerWhatsAppAlert('${sc.entity}')">
+                <i class="fa-brands fa-whatsapp"></i> Kirim Notifikasi Milestone via WhatsApp
+            </button>
+        `;
+    }
+
+    document.getElementById('panel-body').innerHTML = bodyHtml;
+}
+
+function buildChecklistHtml(label, checklist) {
+    const items = checklist.map(item => `
+        <div class="checklist-item ${item.done ? 'done' : ''}">
+            <i class="fa-solid ${item.done ? 'fa-circle-check' : 'fa-circle'} checklist-icon"></i>
+            <span>${item.item}</span>
+        </div>
+    `).join('');
+    return `
+        <div>
+            <div class="detail-group-label"><i class="fa-solid fa-list-check" style="font-size:10px;"></i>${label}</div>
+            <div class="checklist">${items}</div>
+        </div>
+    `;
+}
+
+function loadExtraEventPanel(ev) {
+    document.getElementById('panel-tag').textContent = `EVENT KALENDER — ${ev.type.toUpperCase()}`;
+    document.getElementById('panel-title').textContent = ev.entity;
+    document.getElementById('panel-sub').innerHTML = `<i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;${ev.day} ${TODAY_MONTH} ${TODAY_YEAR}`;
+    document.getElementById('panel-body').innerHTML = `
+        <div class="legal-card">
+            <div class="legal-card-title">${ev.title}</div>
+            <div class="legal-card-desc">${ev.desc}</div>
+            <div class="legal-card-ref"><i class="fa-solid fa-link"></i>${ev.law}</div>
+        </div>
+        <div class="countdown-box type-${ev.status === 'Completed' ? 'success' : 'info'}">
+            <i class="fa-solid ${ev.status === 'Completed' ? 'fa-circle-check' : 'fa-circle-info'} countdown-icon"></i>
+            <div>
+                <div class="countdown-time">${ev.status}</div>
+                <div class="countdown-sub">${ev.day} ${TODAY_MONTH} ${TODAY_YEAR}</div>
+            </div>
+        </div>
+    `;
+}
+
+function setPanelDefault() {
+    document.getElementById('panel-tag').textContent = 'Konteks Regulasi';
+    document.getElementById('panel-title').textContent = 'Pilih entitas atau event untuk memuat detail regulasi';
+    document.getElementById('panel-sub').innerHTML = `<i class="fa-solid fa-map-marker-alt"></i>&nbsp;&nbsp;Sulawesi Utara — KPwBI Manado`;
+    document.getElementById('panel-body').innerHTML = `
+        <div style="text-align:center;padding:30px 20px;color:var(--text-dim);">
+            <i class="fa-solid fa-calendar-check" style="font-size:36px;margin-bottom:14px;opacity:0.3;display:block;"></i>
+            <p style="font-size:12px;line-height:1.6;">Klik pada event kalender atau baris tabel untuk menampilkan detail regulasi, dasar hukum, dan opsi tindak lanjut.</p>
+        </div>
+        <div class="legal-card">
+            <div class="legal-card-title">4 Skenario Sulut Aktif — Juni 2026</div>
+            <div class="legal-card-desc">
+                <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px;">
+                    ${DB.scenarios.map(s => `
+                        <div style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);transition:all .2s;" onclick="loadScenarioPanel(DB.scenarios.find(x=>x.id==='${s.id}'))" onmouseover="this.style.borderColor='var(--accent-cyan)'" onmouseout="this.style.borderColor='var(--border-color)'">
+                            <div class="ev-badge ${s.badgeClass}" style="transform:none;flex-shrink:0;padding:3px 7px;white-space:nowrap;">
+                                <i class="fa-solid ${s.badgeIcon}"></i>
+                            </div>
+                            <span style="font-size:11.5px;color:#fff;font-weight:600;">${s.entity}</span>
+                            <span style="font-size:10px;color:var(--text-dim);margin-left:auto;">${s.day} ${TODAY_MONTH}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/* ================================================================
+   WHATSAPP AUTOMATION LOG
+================================================================ */
+function triggerWhatsAppAlert(entityName) {
+    showToast(
+        `[SUKSES] Eskalasi darurat SLA berhasil dikirim via WhatsApp Gateway ke Compliance Officer <strong>${entityName}</strong>.`,
+        'wa',
+        '📱 WhatsApp Gateway — Pesan Terkirim',
+        5000
+    );
+}
+
+function renderAutomationLog() {
+    const rows = DB.automationLogs.map(log => `
+        <tr>
+            <td><span class="mono-text" style="font-size:10.5px;">${log.waktu}</span></td>
+            <td>
+                <span class="entity-name" style="font-size:12.5px;">${log.entity}</span>
+                <span class="entity-id">${DB.masterEntities.find(e => e.name === log.entity)?.id || log.entityId || '—'}</span>
+            </td>
+            <td>
+                <span class="pill ${log.pillClass}" style="white-space:normal;line-height:1.4;height:auto;padding:5px 10px;">
+                    ${log.deteksi}
+                </span>
+            </td>
+            <td>
+                <div class="omni-badge" style="flex-direction:column;align-items:flex-start;gap:5px;">
+                    <div style="display:flex;align-items:center;gap:5px;">
+                        <div class="portal-dot"></div>
+                        <span style="font-size:11px;color:var(--text-muted);">📢 ${log.portalStatus}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:5px;">
+                        <div class="wa-dot"></div>
+                        <span style="font-size:11px;color:#34d399;font-weight:700;">🟢 ${log.waStatus}</span>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <button class="btn-wa-resend" onclick="triggerWhatsAppAlert('${log.entity}')">
+                    <i class="fa-brands fa-whatsapp"></i> Kirim Ulang Urgent
+                </button>
+            </td>
+        </tr>
+    `).join('');
+    document.getElementById('automation-log-rows').innerHTML = rows;
+}
+
+/* ================================================================
+   EXECUTIVE DASHBOARD MODULE
+================================================================ */
+function renderExecModule() {
+    document.getElementById('workspace-title').textContent = 'Dashboard Analisis Eksekutif — Komparatif Makro Sulut';
+    document.getElementById('kpi-matrix-section').innerHTML = `
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Rasio Kepatuhan Nasional</p><p class="metric-value" style="color:#34d399;">94.2%</p><p class="metric-sub">+1.3% vs Mei 2026</p></div><div class="metric-icon icon-green"><i class="fa-solid fa-chart-line"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Total Volume Transaksi Juni</p><p class="metric-value" style="color:var(--accent-cyan);">Rp 4.2 T</p><p class="metric-sub">Sulut Region · Estimasi</p></div><div class="metric-icon icon-total"><i class="fa-solid fa-wallet"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">KUPVA Risiko Tinggi Aktif</p><p class="metric-value text-critical">1 Entitas</p><p class="metric-sub">PT Sentralindo Valutama</p></div><div class="metric-icon icon-warnings"><i class="fa-solid fa-triangle-exclamation"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Denda Terkumpul (YTD 2026)</p><p class="metric-value" style="color:#fbbf24;">Rp 29.75 Jt</p><p class="metric-sub">3 Kasus Terselesaikan</p></div><div class="metric-icon icon-upcoming"><i class="fa-solid fa-sack-dollar"></i></div></div>
+    `;
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+    const vals   = [3, 5, 8, 11, 6, 14];
+    const colors = ['#3b82f6','#3b82f6','#f59e0b','#ef4444','#3b82f6','#ef4444'];
+    const maxV   = Math.max(...vals);
+    const bars   = months.map((m, i) => `
+        <div class="bar-col">
+            <div class="bar-fill" style="height:${(vals[i]/maxV)*140}px;background:${colors[i]};">
+                <span class="bar-val">${vals[i]}</span>
+            </div>
+            <div class="bar-lbl">${m}</div>
+        </div>
+    `).join('');
+
+    document.getElementById('dynamic-module-workspace').innerHTML = `
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title"><i class="fa-solid fa-chart-bar" style="color:var(--accent-cyan);"></i> Pelanggaran SLA Laporan Per Bulan (2026)</div>
+                <div class="bar-graph">${bars}</div>
+                <p style="font-size:10.5px;color:var(--text-dim);margin-top:10px;"><i class="fa-solid fa-circle" style="color:#ef4444;"></i> Juni 2026 menunjukkan peningkatan signifikan (14 pelanggaran) seiring ekspansi entitas baru di Sulut.</p>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title"><i class="fa-solid fa-circle-half-stroke" style="color:var(--accent-cyan);"></i> Distribusi Zonasi Risiko — Sulut</div>
+                <div class="risk-zone-item"><div class="rz-dot" style="background:#ef4444;box-shadow:0 0 6px #ef4444;"></div><div class="rz-label">Zona Merah (Kritis)</div><span class="rz-count" style="color:#f87171;">1 Entitas</span></div>
+                <div class="risk-zone-item"><div class="rz-dot" style="background:#f59e0b;"></div><div class="rz-label">Zona Kuning (Pantauan)</div><span class="rz-count" style="color:#fbbf24;">3 Entitas</span></div>
+                <div class="risk-zone-item"><div class="rz-dot" style="background:#10b981;"></div><div class="rz-label">Zona Hijau (Aman)</div><span class="rz-count" style="color:#34d399;">2 Entitas</span></div>
+                <div class="divider" style="margin:10px 0;"></div>
+                <div style="font-size:11.5px;color:var(--text-muted);"><strong style="color:#fff;">Total KUPVA Sulut:</strong> 6 Entitas Terdaftar &nbsp;|&nbsp; <strong style="color:var(--accent-cyan);">1 Permohonan Baru</strong></div>
+            </div>
+        </div>
+    `;
+    loadRightPanelGeneric('Dashboard Eksekutif', 'Analisis makro surveillance KUPVA BB Sulawesi Utara. Data diperbarui otomatis setiap pukul 00:00 WIB melalui koneksi langsung sistem BI-SSS → data warehouse KPwBI.');
+}
+
+/* ================================================================
+   DATA MASTER MODULE
+================================================================ */
+function renderMasterModule() {
+    document.getElementById('workspace-title').textContent = 'Data Master Entitas KUPVA BB Terlisensi — Sulawesi Utara';
+    document.getElementById('kpi-matrix-section').innerHTML = `
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Total KUPVA BB Aktif (Sulut)</p><p class="metric-value" style="color:var(--accent-cyan);">5</p><p class="metric-sub">+ 1 Permohonan Baru</p></div><div class="metric-icon icon-total"><i class="fa-solid fa-shield-halved"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Permohonan Izin Baru</p><p class="metric-value" style="color:#60a5fa;">1 Berkas</p><p class="metric-sub">PT Wale Bunaken</p></div><div class="metric-icon icon-pending"><i class="fa-solid fa-file-signature"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Izin Hampir Kadaluarsa</p><p class="metric-value" style="color:#fbbf24;">1 Entitas</p><p class="metric-sub">PT Dua Sisi Sentosa — 2 Hari</p></div><div class="metric-icon icon-upcoming"><i class="fa-solid fa-calendar-xmark"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">KUPVA Pengawasan Khusus</p><p class="metric-value text-critical">1 Entitas</p><p class="metric-sub">PT Sentralindo Valutama</p></div><div class="metric-icon icon-warnings"><i class="fa-solid fa-eye"></i></div></div>
+    `;
+    const statusPill = (s) => {
+        const map = { 'Aktif': 'pill-success', 'Pengawasan Khusus': 'pill-danger', 'Ekspansi Aktif': 'pill-info', 'Permohonan Baru': 'pill-cyan', 'Teguran Aktif': 'pill-warning' };
+        return `<span class="pill ${map[s] || 'pill-neutral'}">${s}</span>`;
+    };
+    const rows = DB.masterEntities.map(e => `
+        <tr onclick="loadMasterEntityPanel('${e.id}')">
+            <td>
+                <span class="entity-name">${e.name}</span>
+                <span class="entity-id">${e.id}</span>
+                <span class="entity-location"><i class="fa-solid fa-location-dot" style="font-size:9px;color:var(--accent-cyan);"></i>&nbsp;${e.location}</span>
+            </td>
+            <td>${statusPill(e.status)}</td>
+            <td><span style="font-weight:600;color:#fff;">${e.cabang}</span></td>
+            <td><span class="mono-text">${e.modal}</span></td>
+            <td><span class="pill ${getPillClass(e.risiko)}">${e.risiko}</span></td>
+            <td style="font-size:11.5px;color:${e.izinExpiry === '24 Juni 2026' ? '#f87171' : '#fff'};">${e.izinExpiry}</td>
+        </tr>
+    `).join('');
+
+    document.getElementById('dynamic-module-workspace').innerHTML = `
+        <div class="list-shell">
+            <div class="list-shell-header">
+                <div class="list-shell-title"><i class="fa-solid fa-building" style="color:var(--accent-cyan);"></i> Daftar Entitas KUPVA BB — KPwBI Sulawesi Utara <span class="list-shell-count">${DB.masterEntities.length} Entitas</span></div>
+            </div>
+            <table class="data-table">
+                <thead><tr><th>Nama Entitas KUPVA BB</th><th>Status Lisensi</th><th>Jaringan Kantor</th><th>Modal Disetor</th><th>Profil Risiko</th><th>Kadaluarsa Izin</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+    `;
+    loadMasterEntityPanel('KUPVA-SULUT-2021-043');
+}
+
+function loadMasterEntityPanel(id) {
+    const ent = DB.masterEntities.find(e => e.id === id);
+    if (!ent) return;
+    const sc = DB.scenarios.find(s => s.entityId === id);
+    document.getElementById('panel-tag').textContent = 'PROFIL DATA MASTER 360°';
+    document.getElementById('panel-title').textContent = ent.name;
+    document.getElementById('panel-sub').innerHTML = `<i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;${ent.location}`;
+
+    let bodyHtml = `
+        <div class="branch-info-grid">
+            <div class="branch-info-cell"><div class="branch-info-key">ID Validasi BI</div><div class="branch-info-val" style="font-size:10.5px;font-family:var(--font-mono);">${ent.id}</div></div>
+            <div class="branch-info-cell"><div class="branch-info-key">Status</div><div class="branch-info-val">${ent.status}</div></div>
+            <div class="branch-info-cell"><div class="branch-info-key">Modal Disetor</div><div class="branch-info-val" style="color:var(--accent-cyan);">${ent.modal}</div></div>
+            <div class="branch-info-cell"><div class="branch-info-key">Jaringan Kantor</div><div class="branch-info-val">${ent.cabang}</div></div>
+            <div class="branch-info-cell"><div class="branch-info-key">Direktur Utama</div><div class="branch-info-val" style="font-size:11px;">${ent.namaDir}</div></div>
+            <div class="branch-info-cell"><div class="branch-info-key">Profil Risiko</div><div class="branch-info-val"><span class="pill ${getPillClass(ent.risiko)}" style="padding:3px 8px;">${ent.risiko}</span></div></div>
+        </div>
+        <div class="legal-card">
+            <div class="legal-card-title">Masa Berlaku Izin Usaha</div>
+            <div class="legal-card-desc">Berdasarkan PBI No. 18/20/PBI/2016, izin usaha KUPVA BB berlaku selama <strong style="color:#fff;">5 (lima) tahun</strong> dan wajib diperpanjang sebelum berakhir. Kadaluarsa izin: <strong style="color:${ent.izinExpiry === '24 Juni 2026' ? '#f87171' : '#fbbf24'};">${ent.izinExpiry}</strong>.</div>
+        </div>
+    `;
+    if (sc) {
+        bodyHtml += `
+            <div style="border:1px solid var(--border-color);border-radius:var(--radius-md);padding:12px 14px;background:rgba(8,18,30,0.3);">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;letter-spacing:0.7px;">Skenario Aktif Terkait</div>
+                <div class="ev-badge ${sc.badgeClass}" style="transform:none;cursor:pointer;white-space:normal;" onclick="loadScenarioPanel(DB.scenarios.find(x=>x.id==='${sc.id}'))">
+                    <i class="fa-solid ${sc.badgeIcon}"></i>
+                    <span>${sc.title}</span>
+                </div>
+            </div>
+        `;
+    }
+    document.getElementById('panel-body').innerHTML = bodyHtml;
+}
+
+/* ================================================================
+   SANCTIONS MODULE
+================================================================ */
+function renderSanctionsModule() {
+    document.getElementById('workspace-title').textContent = 'Matriks Sanksi & Penegakan Hukum — Enforcement Pipeline';
+    document.getElementById('kpi-matrix-section').innerHTML = `
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Kasus Sanksi Aktif</p><p class="metric-value" style="color:#f87171;">3 Kasus</p><p class="metric-sub">1 Kritikal · 2 SP-1 Aktif</p></div><div class="metric-icon icon-warnings"><i class="fa-solid fa-scale-balanced"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Total Denda Terkumpul</p><p class="metric-value" style="color:#fbbf24;">Rp 29.75 Jt</p><p class="metric-sub">YTD 2026</p></div><div class="metric-icon icon-orange"><i class="fa-solid fa-sack-dollar"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Kasus Terselesaikan</p><p class="metric-value" style="color:#34d399;">1</p><p class="metric-sub">Pacific Exchange Sulut</p></div><div class="metric-icon icon-green"><i class="fa-solid fa-circle-check"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Potensi Pembekuan Izin</p><p class="metric-value text-critical">1 Entitas</p><p class="metric-sub">PT Dua Sisi Sentosa</p></div><div class="metric-icon icon-warnings"><i class="fa-solid fa-ban"></i></div></div>
+    `;
+    const rows = DB.sanctionsPipeline.map(s => `
+        <tr>
+            <td><span class="entity-name">${s.entity}</span></td>
+            <td style="color:var(--text-muted);font-size:12px;">${s.violation}</td>
+            <td><span class="mono-text" style="color:#fbbf24;">${s.denda}</span></td>
+            <td><span class="pill pill-${s.tingkat}">${s.status}</span></td>
+            <td style="font-size:12px;color:${s.tingkat==='danger'?'#f87171':s.tingkat==='success'?'#34d399':'#fbbf24'};">${s.deadline}</td>
+            <td>
+                <button class="btn-wa-resend" onclick="triggerWhatsAppAlert('${s.entity}')">
+                    <i class="fa-brands fa-whatsapp"></i> Eskalasi WA
+                </button>
+            </td>
+        </tr>
+    `).join('');
+    document.getElementById('dynamic-module-workspace').innerHTML = `
+        <div class="list-shell">
+            <div class="list-shell-header">
+                <div class="list-shell-title"><i class="fa-solid fa-scale-balanced" style="color:#f87171;"></i> Pipeline Penegakan Sanksi Administratif <span class="list-shell-count" style="background:var(--red-bg);color:#f87171;border:1px solid var(--red-b);">${DB.sanctionsPipeline.length} Kasus</span></div>
+            </div>
+            <table class="data-table">
+                <thead><tr><th>Entitas Pelanggar</th><th>Deskripsi Pelanggaran SLA</th><th>Sanksi Finansial</th><th>Status Prosedur</th><th>Batas Waktu Respon</th><th>Eskalasi</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+    `;
+    loadRightPanelGeneric('Penegakan Sanksi', 'Pipeline sanksi diperbarui otomatis berdasarkan deteksi SLA breach dari sistem. Surat Peringatan I → II → Pembekuan Izin → Pencabutan Izin. Dasar: PBI No. 18/20/PBI/2016 & PBI No. 10 Tahun 2024.');
+}
+
+/* ================================================================
+   AML/PPT MODULE
+================================================================ */
+function renderAmlModule() {
+    document.getElementById('workspace-title').textContent = 'Matriks Kepatuhan APU/PPT & PPPSPM — Pelaporan PPATK';
+    document.getElementById('kpi-matrix-section').innerHTML = `
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Indikasi TKM Kritis</p><p class="metric-value text-critical">1 Kasus</p><p class="metric-sub">PT Sentralindo Valutama</p></div><div class="metric-icon icon-warnings"><i class="fa-solid fa-shield-halved"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">LTKT Terdeteksi (> Threshold)</p><p class="metric-value" style="color:#fbbf24;">2 Log</p><p class="metric-sub">Sentralindo & Haji La Tunrung</p></div><div class="metric-icon icon-upcoming"><i class="fa-solid fa-money-bill-transfer"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Laporan ke PPATK (Juni)</p><p class="metric-value" style="color:#34d399;">2 Diterima</p><p class="metric-sub">Haji La Tunrung & Pacific FX</p></div><div class="metric-icon icon-green"><i class="fa-solid fa-paper-plane"></i></div></div>
+        <div class="metric-card"><div class="metric-card-left"><p class="metric-label">Belum Melapor (Kritis)</p><p class="metric-value text-critical">1 Entitas</p><p class="metric-sub">SLA 3 Hari Kerja Tersisa</p></div><div class="metric-icon icon-warnings"><i class="fa-solid fa-circle-exclamation"></i></div></div>
+    `;
+    const riskPill = (r) => {
+        if (r==='KRITIKAL') return `<span class="pill pill-danger">${r}</span>`;
+        if (r==='Sedang')   return `<span class="pill pill-warning">${r}</span>`;
+        return `<span class="pill pill-success">${r}</span>`;
+    };
+    const rows = DB.amlLogs.map(a => `
+        <tr>
+            <td><span class="entity-name">${a.entity}</span></td>
+            <td><span class="pill ${a.type.includes('TKM')?'pill-danger':'pill-warning'}" style="white-space:normal;">${a.type}</span></td>
+            <td><span class="mono-text">${a.value}</span></td>
+            <td style="font-size:11.5px;">${a.date}</td>
+            <td><span class="pill ${a.status.includes('Belum')?'pill-danger':'pill-success'}" style="white-space:normal;">${a.status}</span></td>
+            <td style="font-size:11.5px;color:${a.status.includes('Belum')?'#f87171':'#34d399'};">${a.sla}</td>
+            <td>${riskPill(a.risk)}</td>
+        </tr>
+    `).join('');
+    document.getElementById('dynamic-module-workspace').innerHTML = `
+        <div class="list-shell">
+            <div class="list-shell-header">
+                <div class="list-shell-title"><i class="fa-solid fa-file-shield" style="color:var(--red);"></i> Log Transaksi APU/PPT — Matriks Surveillance PPATK <span class="list-shell-count" style="background:var(--red-bg);color:#f87171;border:1px solid var(--red-b);">${DB.amlLogs.length} Log</span></div>
+            </div>
+            <table class="data-table">
+                <thead><tr><th>Entitas Pengirim</th><th>Jenis Temuan TRX</th><th>Nilai Valas</th><th>Waktu Deteksi</th><th>Status Pelaporan PPATK</th><th>SLA Regulasi</th><th>Tingkat Risiko</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>
+    `;
+    const sc = DB.scenarios.find(s => s.id === 'sulut-002');
+    if (sc) loadScenarioPanel(sc);
+}
+
+/* ================================================================
+   GLOBAL SEARCH
+================================================================ */
+function handleGlobalSearch(val) {
+    const q = val.toLowerCase().trim();
+    if (!q) return;
+    const map = {
+        'dua sisi': 'sulut-001', 'sentosa': 'sulut-001',
+        'sentralindo': 'sulut-002', 'valutama': 'sulut-002',
+        'haji': 'sulut-003', 'la tunrung': 'sulut-003', 'tunrung': 'sulut-003',
+        'wale': 'sulut-004', 'bunaken': 'sulut-004'
+    };
+    for (const [key, scId] of Object.entries(map)) {
+        if (q.includes(key)) {
+            const sc = DB.scenarios.find(s => s.id === scId);
+            if (sc && currentModule === 'tracker') {
+                loadScenarioPanel(sc);
+                showToast(`Menampilkan detail ${sc.entity} di panel kanan.`, 'info', 'Pencarian Global', 2500);
+            }
+            return;
+        }
+    }
+}
+
+/* ================================================================
+   GENERIC RIGHT PANEL
+================================================================ */
+function loadRightPanelGeneric(title, desc) {
+    document.getElementById('panel-tag').textContent = 'Informasi Modul';
+    document.getElementById('panel-title').textContent = title;
+    document.getElementById('panel-sub').innerHTML = `<i class="fa-solid fa-map-marker-alt"></i>&nbsp;&nbsp;KPwBI Sulawesi Utara — Manado`;
+    document.getElementById('panel-body').innerHTML = `
+        <div class="legal-card">
+            <div class="legal-card-title">${title}</div>
+            <div class="legal-card-desc">${desc}</div>
+        </div>
+        <div style="text-align:center;padding:20px;color:var(--text-dim);">
+            <i class="fa-solid fa-building-columns" style="font-size:32px;opacity:0.2;display:block;margin-bottom:10px;"></i>
+            <p style="font-size:11.5px;line-height:1.6;">Pilih baris dari tabel untuk memuat detail spesifik entitas dan opsi tindak lanjut.</p>
+        </div>
+    `;
+}
+
+/* ================================================================
+   INITIALIZATION
+================================================================ */
+window.addEventListener('DOMContentLoaded', () => {
+    renderTrackerModule();
+    renderAutomationLog();
+
+    /* Live clock display */
+    document.getElementById('live-clock').textContent = `${TODAY_DOW}, ${TODAY_DAY} ${TODAY_MONTH} ${TODAY_YEAR}`;
+
+    /* Welcome toast */
+    setTimeout(() => {
+        showToast(
+            '<strong>1 Peringatan Kritis</strong> memerlukan tindak lanjut segera — PT Sentralindo Valutama.',
+            'danger',
+            '🚨 Surveillance Alert — AML/CFT',
+            6000
+        );
+    }, 800);
+});
+    </script>
+</body>
+</html>
